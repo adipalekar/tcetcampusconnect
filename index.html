@@ -4,7 +4,1645 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TCET Mumbai ERP Portal — Group 6 PS</title>
-  <link rel="stylesheet" href="styles.css" />
+  <style>
+/* ==========================================================================
+   TCET Mumbai ERP Portal — Group 6 PS
+   Clean academic UI faithfully matching the 7-page rough sketch wireframes
+   plus dedicated Teacher & Administrator dashboards.
+   ========================================================================== */
+
+:root {
+  --bg: #eef4f8;
+  --surface: #ffffff;
+  --surface-soft: #f7fafc;
+  --border: #cbd5e1;
+  --border-strong: #1e40af;
+  --text: #0f172a;
+  --muted: #475569;
+
+  /* Role-specific accent tokens */
+  --student-primary: #1d4ed8;
+  --student-soft: #dbeafe;
+  --teacher-primary: #0f766e;
+  --teacher-soft: #ccfbf1;
+  --admin-primary: #b45309;
+  --admin-soft: #fef3c7;
+
+  /* Status colors */
+  --present-bg: #dcfce7;
+  --present-text: #166534;
+  --absent-bg: #fee2e2;
+  --absent-text: #991b1b;
+  --cancelled-bg: #f1f5f9;
+  --cancelled-text: #475569;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 10px 30px rgba(15, 23, 42, 0.12);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ==========================================================================
+   LOGIN SCREEN
+   ========================================================================== */
+.login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(135deg, #e0ecff 0%, #eef4f8 50%, #e6f6f4 100%);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 960px;
+  background: var(--surface);
+  border-radius: 24px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid #dbe4f0;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+}
+
+.login-brand {
+  background: linear-gradient(160deg, #0f172a 0%, #1e3a8a 60%, #1d4ed8 100%);
+  color: #ffffff;
+  padding: 40px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-logo-box {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.brand-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.brand-sub {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: #bfdbfe;
+}
+
+.brand-hero h2 {
+  margin: 0 0 10px;
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.brand-hero p {
+  margin: 0;
+  color: #dbeafe;
+  font-size: 14px;
+}
+
+.demo-box {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-size: 13px;
+}
+
+.demo-box-title {
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.demo-quick-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.demo-btn {
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.demo-btn:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.login-form-pane {
+  padding: 36px 34px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.role-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  background: #f1f5f9;
+  padding: 5px;
+  border-radius: 12px;
+  margin-bottom: 22px;
+}
+
+.role-tab {
+  border: none;
+  background: transparent;
+  padding: 10px 8px;
+  border-radius: 9px;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.role-tab.active-student {
+  background: var(--student-primary);
+  color: #ffffff;
+  box-shadow: var(--shadow-sm);
+}
+
+.role-tab.active-teacher {
+  background: var(--teacher-primary);
+  color: #ffffff;
+  box-shadow: var(--shadow-sm);
+}
+
+.role-tab.active-admin {
+  background: var(--admin-primary);
+  color: #ffffff;
+  box-shadow: var(--shadow-sm);
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 14px;
+  background: #ffffff;
+  color: var(--text);
+  transition: border-color 0.15s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--student-primary);
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  background: var(--student-primary);
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.btn-primary:hover {
+  opacity: 0.93;
+}
+
+.btn-primary:active {
+  transform: scale(0.99);
+}
+
+.btn-teacher {
+  background: var(--teacher-primary);
+}
+
+.btn-admin {
+  background: var(--admin-primary);
+}
+
+.btn-outline {
+  padding: 8px 14px;
+  border-radius: 9px;
+  border: 1.5px solid var(--border);
+  background: #ffffff;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-outline:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.login-error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  border-radius: 9px;
+  padding: 9px 12px;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.db-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 11px;
+  border-radius: var(--radius-pill);
+  background: #dcfce7;
+  color: #166534;
+}
+
+.db-badge.cloud {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.db-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulseDot 1.8s infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.82); }
+}
+
+/* ==========================================================================
+   ERP SHELL (Matching Sketch Wireframe: Top Header + Left Sidebar + Main)
+   ========================================================================== */
+.erp-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 230px 1fr;
+  grid-template-rows: 74px 1fr;
+  background: var(--bg);
+}
+
+.erp-shell.role-teacher {
+  --active-primary: var(--teacher-primary);
+  --active-soft: var(--teacher-soft);
+}
+
+.erp-shell.role-admin {
+  --active-primary: var(--admin-primary);
+  --active-soft: var(--admin-soft);
+}
+
+.erp-shell.role-student {
+  --active-primary: var(--student-primary);
+  --active-soft: var(--student-soft);
+}
+
+/* Top-Left Logo Cell (Sketch: square graduation cap box above sidebar) */
+.erp-logo-cell {
+  background: var(--surface);
+  border-right: 1.5px solid var(--border);
+  border-bottom: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 14px;
+}
+
+.sketch-logo-square {
+  width: 46px;
+  height: 46px;
+  border: 2px solid var(--active-primary, #1d4ed8);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--active-primary, #1d4ed8);
+  background: var(--active-soft, #dbeafe);
+  flex-shrink: 0;
+}
+
+.logo-text-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-text-stack strong {
+  font-size: 14px;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.logo-text-stack span {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* Top-Right Header Bar (Sketch: Centered Page Title + Right Profile Pill) */
+.erp-topbar {
+  background: var(--surface);
+  border-bottom: 1.5px solid var(--border);
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.topbar-left-mobile {
+  display: none;
+}
+
+.topbar-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--active-primary, #1d4ed8);
+  letter-spacing: -0.01em;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Sketch Profile Pill Button */
+.profile-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 16px 6px 8px;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--active-primary, #1d4ed8);
+  background: #ffffff;
+  color: var(--active-primary, #1d4ed8);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.profile-pill-btn:hover {
+  background: var(--active-soft, #dbeafe);
+}
+
+.profile-pill-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--active-primary, #1d4ed8);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Left Sidebar (Sketch: vertical menu with active item circled in pill) */
+.erp-sidebar {
+  background: var(--surface);
+  border-right: 1.5px solid var(--border);
+  padding: 20px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nav-item {
+  width: 100%;
+  text-align: left;
+  padding: 11px 16px;
+  border-radius: var(--radius-pill);
+  border: 2px solid transparent;
+  background: transparent;
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.15s;
+}
+
+.nav-item:hover {
+  background: #f1f5f9;
+}
+
+.nav-item.active {
+  border-color: var(--active-primary, #1d4ed8);
+  background: var(--active-soft, #dbeafe);
+  color: var(--active-primary, #1d4ed8);
+  font-weight: 700;
+}
+
+.sidebar-footer {
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1.5px solid #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.logout-btn:hover {
+  background: #fee2e2;
+}
+
+/* Main Content Area */
+.erp-main {
+  padding: 24px 28px 36px;
+  overflow-x: hidden;
+}
+
+/* ==========================================================================
+   COMMON CARDS & WIREFRAME COMPONENTS
+   ========================================================================== */
+.card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.card-title {
+  margin: 0 0 14px;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--active-primary, #1d4ed8);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* ==========================================================================
+   STUDENT DASHBOARD (Sketch Page 2 Top)
+   ========================================================================== */
+.greeting-block {
+  margin-bottom: 18px;
+}
+
+.greeting-block h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.greeting-block p {
+  margin: 2px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.85fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.dashboard-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Upcoming Submissions inner split */
+.submissions-split {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 18px;
+}
+
+.day-sub-block {
+  margin-bottom: 12px;
+}
+
+.day-sub-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+
+.day-sub-box {
+  border: 1.5px solid var(--student-primary);
+  background: #f8fbff;
+  border-radius: 9px;
+  padding: 9px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.day-sub-box.empty {
+  border-color: var(--border);
+  color: var(--muted);
+  background: #f8fafc;
+}
+
+.period-sub-group {
+  margin-bottom: 12px;
+}
+
+.period-sub-group h4 {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--student-primary);
+}
+
+.period-sub-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13.5px;
+  padding: 4px 0;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+/* Tomorrow's Timetable rows */
+.tomorrow-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 12px;
+  border-radius: 9px;
+  background: var(--surface-soft);
+  margin-bottom: 8px;
+  font-size: 14.5px;
+}
+
+.tomorrow-row strong {
+  color: var(--text);
+}
+
+.tomorrow-row span {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--student-primary);
+}
+
+/* Attendance quick list on dashboard */
+.mini-att-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-size: 14.5px;
+}
+
+.mini-att-row:hover {
+  background: var(--student-soft);
+}
+
+.pct-pill {
+  font-weight: 800;
+  font-size: 13.5px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+}
+
+.pct-high { background: #dcfce7; color: #166534; }
+.pct-mid  { background: #fef3c7; color: #92400e; }
+.pct-low  { background: #fee2e2; color: #991b1b; }
+
+/* Announcement pills (Dashboard + Announcements tab) */
+.announcement-pill {
+  width: 100%;
+  text-align: left;
+  padding: 12px 16px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--student-primary);
+  background: #f8fbff;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.announcement-pill:hover {
+  background: var(--student-soft);
+  transform: translateX(2px);
+}
+
+.announcement-pill small {
+  color: var(--muted);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   TIME TABLE (Sketch Page 2 Bottom — with Horizontal Slider)
+   ========================================================================== */
+.timetable-layout {
+  display: grid;
+  grid-template-columns: 2.15fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.tt-scroll-viewport {
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.tt-grid-table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: separate;
+  border-spacing: 8px;
+}
+
+.tt-grid-table th {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--student-primary);
+  padding: 6px 8px;
+  text-align: center;
+}
+
+.tt-day-cell {
+  font-weight: 800;
+  color: var(--text);
+  font-size: 14px;
+  width: 60px;
+  text-align: left;
+}
+
+.tt-slot-box {
+  border: 1.5px solid var(--student-primary);
+  background: #f8fbff;
+  border-radius: 10px;
+  padding: 8px 10px;
+  text-align: center;
+  min-height: 54px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.tt-slot-box strong {
+  font-size: 13.5px;
+  color: var(--text);
+}
+
+.tt-slot-box span {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.tt-slot-empty {
+  border: 1px dashed #cbd5e1;
+  border-radius: 10px;
+  min-height: 54px;
+  background: #f8fafc;
+}
+
+/* Sketch Bottom Horizontal Slider */
+.slider-control-bar {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--student-primary);
+}
+
+.slider-control-bar input[type="range"] {
+  flex: 1;
+  accent-color: var(--student-primary);
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   ANNOUNCEMENTS (Sketch Page 3 Top)
+   ========================================================================== */
+.announcements-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+
+.column-header-rule {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--student-primary);
+  padding-bottom: 10px;
+  margin: 0 0 14px;
+  border-bottom: 2px solid var(--student-primary);
+}
+
+/* ==========================================================================
+   EXAMS (Sketch Page 3 Bottom & Page 4 Bottom)
+   ========================================================================== */
+.exams-layout {
+  display: grid;
+  grid-template-columns: 1.85fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.exam-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.exam-box-btn {
+  border: 2px solid var(--student-primary);
+  background: #f8fbff;
+  border-radius: 12px;
+  padding: 18px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.exam-box-btn:hover {
+  background: var(--student-soft);
+  transform: translateY(-2px);
+}
+
+.exam-box-btn.full-span {
+  grid-column: 1 / -1;
+}
+
+.exam-box-label {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.exam-box-score {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--student-primary);
+}
+
+.overall-big-card {
+  text-align: center;
+  padding: 24px 18px;
+}
+
+.overall-big-card .big-pct {
+  font-size: 46px;
+  font-weight: 900;
+  color: var(--student-primary);
+  line-height: 1.1;
+  margin-top: 6px;
+}
+
+/* ==========================================================================
+   SYLLABUS (Sketch Page 5 Top & Page 6 Top)
+   ========================================================================== */
+.syllabus-top-action {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.btn-pdf-view {
+  border: 2px solid var(--student-primary);
+  background: #ffffff;
+  color: var(--student-primary);
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-size: 14.5px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-pdf-view:hover {
+  background: var(--student-primary);
+  color: #ffffff;
+}
+
+.syllabus-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.clickable-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.clickable-table th {
+  text-align: left;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--student-primary);
+  border-bottom: 2px solid var(--student-primary);
+}
+
+.clickable-table th.right,
+.clickable-table td.right {
+  text-align: right;
+}
+
+.clickable-table tbody tr {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.clickable-table tbody tr:hover {
+  background: var(--student-soft);
+}
+
+.clickable-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   ATTENDANCE (Sketch Page 5 Bottom & Page 6 Bottom — with Vertical Slider)
+   ========================================================================== */
+.attendance-main-card {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 26px 30px;
+}
+
+.attendance-overall-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  margin-bottom: 14px;
+  border-bottom: 2px solid var(--student-primary);
+}
+
+.attendance-overall-row h3 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.attendance-overall-row .overall-num {
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--student-primary);
+}
+
+.attendance-subject-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: 6px;
+}
+
+.attendance-subject-row:hover {
+  background: var(--student-soft);
+  border-color: var(--student-primary);
+}
+
+.attendance-subject-row span:first-child {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.attendance-subject-row span:last-child {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--student-primary);
+}
+
+/* Attendance Detail Modal with Left Vertical Slider (Sketch Page 6 Bottom) */
+.att-detail-layout {
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  gap: 14px;
+  align-items: stretch;
+}
+
+.vertical-slider-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  border-radius: 10px;
+  padding: 10px 4px;
+}
+
+.vertical-slider-rail input[type="range"] {
+  writing-mode: vertical-lr;
+  direction: ltr;
+  height: 240px;
+  width: 24px;
+  accent-color: var(--student-primary);
+  cursor: pointer;
+}
+
+.att-detail-scroll {
+  max-height: 290px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 11px;
+  border-radius: var(--radius-pill);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.status-Present   { background: var(--present-bg); color: var(--present-text); }
+.status-Absent    { background: var(--absent-bg); color: var(--absent-text); }
+.status-Cancelled { background: var(--cancelled-bg); color: var(--cancelled-text); }
+
+/* ==========================================================================
+   MODAL OVERLAY & SPECIFIC MODALS (Pages 4, 6, 7)
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.52);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.modal-box {
+  background: var(--surface);
+  border: 2px solid var(--student-primary);
+  border-radius: 18px;
+  width: 100%;
+  max-width: 660px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 26px 28px;
+  box-shadow: var(--shadow-md);
+  animation: modalIn 0.16s ease-out;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1.5px solid var(--border);
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--student-primary);
+}
+
+.modal-close-btn {
+  border: 1.5px solid var(--border);
+  background: #f8fafc;
+  color: var(--text);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.modal-close-btn:hover {
+  background: #e2e8f0;
+}
+
+/* Exam Detail Modal Grid (Sketch Page 4 Bottom: 3 top, 2 middle, 1 overall) */
+.exam-detail-row-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.exam-detail-row-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  max-width: 420px;
+  margin: 0 auto 18px;
+}
+
+.exam-sub-card {
+  border: 1.5px solid var(--student-primary);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+  background: #f8fbff;
+}
+
+.exam-sub-card .sub-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.exam-sub-card .sub-val {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  margin-top: 4px;
+}
+
+.exam-overall-box {
+  border: 2px solid var(--student-primary);
+  border-radius: 12px;
+  padding: 18px;
+  max-width: 280px;
+  margin: 0 auto;
+  text-align: center;
+  background: var(--student-soft);
+}
+
+/* Profile Modal (Sketch Page 7) */
+.profile-modal-grid {
+  display: grid;
+  grid-template-columns: 165px 1fr;
+  gap: 24px;
+  align-items: center;
+}
+
+.profile-avatar-wrap {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  margin: 0 auto;
+}
+
+.profile-avatar-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 3px solid var(--student-primary);
+  background: var(--student-soft);
+  color: var(--student-primary);
+  font-size: 46px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-edit-pencil {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  background: var(--student-primary);
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.profile-field-pill {
+  border: 1.5px solid var(--student-primary);
+  border-radius: 12px;
+  padding: 9px 14px;
+  font-size: 15px;
+  font-weight: 700;
+  background: #f8fbff;
+  margin-bottom: 12px;
+}
+
+/* ==========================================================================
+   TEACHER & ADMIN PORTAL SPECIFIC CONTROLS
+   ========================================================================== */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.kpi-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+
+.kpi-card small {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.kpi-card .kpi-val {
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--active-primary);
+  margin-top: 4px;
+}
+
+.toolbar-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+  margin-bottom: 18px;
+}
+
+.toolbar-row .form-group {
+  margin-bottom: 0;
+  min-width: 160px;
+  flex: 1;
+}
+
+.att-toggle-group {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.att-toggle-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: #ffffff;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.att-toggle-btn.selected-Present   { background: var(--present-bg); color: var(--present-text); border-color: #16a34a; }
+.att-toggle-btn.selected-Absent    { background: var(--absent-bg); color: var(--absent-text); border-color: #dc2626; }
+.att-toggle-btn.selected-Cancelled { background: var(--cancelled-bg); color: var(--cancelled-text); border-color: #64748b; }
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th, .data-table td {
+  padding: 11px 12px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 14px;
+}
+
+.data-table th {
+  background: #f8fafc;
+  font-weight: 800;
+  color: var(--muted);
+  font-size: 12.5px;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   TOAST NOTIFICATIONS
+   ========================================================================== */
+.toast-container {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1200;
+  max-width: 360px;
+}
+
+.toast {
+  background: #0f172a;
+  color: #ffffff;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+  box-shadow: var(--shadow-md);
+  border-left: 4px solid #38bdf8;
+  animation: toastIn 0.2s ease-out;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+@media (max-width: 900px) {
+  .login-card {
+    grid-template-columns: 1fr;
+  }
+  .erp-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: 64px auto 1fr;
+  }
+  .erp-logo-cell {
+    display: none;
+  }
+  .erp-sidebar {
+    border-right: none;
+    border-bottom: 1.5px solid var(--border);
+    padding: 10px 14px;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+  .sidebar-nav {
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  .nav-item {
+    white-space: nowrap;
+    padding: 8px 14px;
+    font-size: 13.5px;
+  }
+  .sidebar-footer {
+    display: none;
+  }
+  .dashboard-grid,
+  .timetable-layout,
+  .announcements-grid,
+  .exams-layout,
+  .syllabus-layout,
+  .profile-modal-grid,
+  .submissions-split {
+    grid-template-columns: 1fr;
+  }
+  .kpi-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .exam-detail-row-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   STUDY TIMER (YPT — Yeolpumta Style, matching TCET Student Portal theme)
+   ========================================================================== */
+.ypt-mode-bar {
+  display: inline-flex;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: var(--radius-pill);
+  gap: 4px;
+}
+
+.ypt-mode-btn {
+  border: none;
+  background: transparent;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.ypt-mode-btn.active {
+  background: var(--student-primary);
+  color: #ffffff;
+}
+
+.ypt-timer-stage {
+  background: #f8fbff;
+  border: 2px solid var(--student-primary);
+  border-radius: 16px;
+  padding: 22px 20px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.ypt-active-sub-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--student-soft);
+  color: var(--student-primary);
+  font-size: 12.5px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.ypt-clock {
+  font-size: 46px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  line-height: 1.15;
+  margin: 4px 0 14px;
+}
+
+.ypt-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.ypt-controls .btn-primary {
+  width: auto;
+  padding: 10px 22px;
+  font-size: 14px;
+}
+
+.ypt-subject-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 1.5px solid #e2e8f0;
+  background: #ffffff;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.ypt-subject-row:hover {
+  border-color: var(--student-primary);
+  background: #f8fbff;
+}
+
+.ypt-subject-row.active {
+  border-color: var(--student-primary);
+  background: var(--student-soft);
+}
+
+.ypt-sub-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ypt-play-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--student-primary);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.ypt-sub-time {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--student-primary);
+}
+
+.ypt-progress-track {
+  width: 100%;
+  height: 10px;
+  background: #e2e8f0;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  margin: 10px 0 6px;
+}
+
+.ypt-progress-fill {
+  height: 100%;
+  background: var(--student-primary);
+  border-radius: var(--radius-pill);
+  transition: width 0.25s ease;
+}
+
+.ypt-group-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 11px;
+  background: var(--surface-soft);
+  border: 1px solid #e2e8f0;
+  margin-bottom: 8px;
+}
+
+.ypt-group-row.is-me {
+  background: #eff6ff;
+  border-color: var(--student-primary);
+}
+
+.ypt-rank-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--student-soft);
+  color: var(--student-primary);
+  font-weight: 800;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ypt-status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.ypt-status-studying { background: #16a34a; }
+.ypt-status-break    { background: #d97706; }
+.ypt-status-offline  { background: #94a3b8; }
+
+.ypt-todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 8px;
+  background: #ffffff;
+}
+
+.ypt-todo-item.done span.todo-title {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.ypt-focus-overlay {
+  text-align: center;
+  padding: 18px 10px;
+}
+
+.ypt-focus-overlay .ypt-clock {
+  font-size: 56px;
+  color: var(--student-primary);
+  margin: 16px 0 22px;
+}
+
+/* Custom Uploaded TCET Logo Styling */
+.brand-logo-box {
+  background: #ffffff;
+  padding: 4px;
+  overflow: hidden;
+}
+
+.sketch-logo-square {
+  width: 52px;
+  height: 52px;
+  background: #ffffff;
+  padding: 3px;
+  overflow: hidden;
+}
+
+.tcet-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+  </style>
 </head>
 <body>
   <div id="app"></div>
@@ -12,14 +1650,2524 @@
     <div id="modal-box" class="modal-box"></div>
   </div>
   <div id="toast-container" class="toast-container" aria-live="polite"></div>
+  <script>
+/* ==========================================================================
+   Firebase Realtime Database Configuration (100% Free Spark Plan)
+   --------------------------------------------------------------------------
+   HOW TO ENABLE CLOUD REAL-TIME SYNC ACROSS DEVICES:
+   1. Go to https://console.firebase.google.com and click "Add project".
+   2. In the left menu, click Build -> Realtime Database -> Create Database.
+   3. Choose "Start in test mode" so read/write works during your demo.
+   4. Copy your Database URL (looks like:
+      "https://tcet-erp-group6-default-rtdb.asia-southeast1.firebasedatabase.app")
+      and paste it into databaseURL below!
 
-  <script src="firebase-config.js"></script>
-  <script src="initial-data.js"></script>
-  <script src="database.js"></script>
-  <script src="auth.js"></script>
-  <script src="student-portal.js"></script>
-  <script src="teacher-portal.js"></script>
-  <script src="admin-portal.js"></script>
-  <script src="app.js"></script>
+   NOTE: If databaseURL is left empty (""), the portal automatically uses
+   Local Real-Time Sync (localStorage + BroadcastChannel), so opening Teacher
+   in one browser tab and Student in another tab STILL updates live!
+   ========================================================================== */
+
+window.TCET_FIREBASE_CONFIG = {
+  databaseURL: "https://tcet-erp-portal-default-rtdb.firebaseio.com"
+};
+
+
+/* ==========================================================================
+   Initial Seed Data for TCET Mumbai — FE Sem I (AI & ML, Division B)
+   Matches every subject, percentage, exam, module, and schedule in the
+   Group 6 PS rough sketch PDF.
+   ========================================================================== */
+
+window.TCET_INITIAL_DATA = {
+  college: {
+    name: "Thakur College of Engineering and Technology (TCET), Mumbai",
+    shortName: "TCET Mumbai",
+    projectTag: "Group 6 — PS ERP Portal"
+  },
+
+  users: {
+    students: [
+      {
+        id: "STU202601",
+        password: "student123",
+        name: "Aarav Deshmukh",
+        age: 18,
+        year: "FE",
+        sem: "Sem I",
+        branch: "AIML",
+        division: "B",
+        rollNo: "B-14"
+      },
+      {
+        id: "STU202602",
+        password: "student123",
+        name: "Ananya Kulkarni",
+        age: 18,
+        year: "FE",
+        sem: "Sem I",
+        branch: "AIML",
+        division: "B",
+        rollNo: "B-15"
+      },
+      {
+        id: "STU202603",
+        password: "student123",
+        name: "Rohan Patil",
+        age: 19,
+        year: "FE",
+        sem: "Sem I",
+        branch: "AIML",
+        division: "B",
+        rollNo: "B-16"
+      },
+      {
+        id: "STU202604",
+        password: "student123",
+        name: "Priya Nair",
+        age: 18,
+        year: "FE",
+        sem: "Sem I",
+        branch: "AIML",
+        division: "B",
+        rollNo: "B-17"
+      }
+    ],
+    teachers: [
+      {
+        id: "FAC202601",
+        password: "teacher123",
+        name: "Prof. Rajesh Sharma",
+        department: "Applied Sciences & Humanities",
+        subject: "Chemistry",
+        phone: "+91 98201 11223"
+      },
+      {
+        id: "FAC202602",
+        password: "teacher123",
+        name: "Prof. Sneha Joshi",
+        department: "Engineering Mathematics",
+        subject: "Maths",
+        phone: "+91 98201 44556"
+      }
+    ],
+    admins: [
+      {
+        id: "ADM202601",
+        password: "admin123",
+        name: "Dr. Meera Kulkarni",
+        designation: "ERP Portal Administrator",
+        department: "TCET Administration"
+      }
+    ]
+  },
+
+  subjects: [
+    { key: "Maths", short: "Math", fullName: "Engineering Mathematics - I", faculty: "Prof. Sneha Joshi" },
+    { key: "Chemistry", short: "Chem", fullName: "Engineering Chemistry", faculty: "Prof. Rajesh Sharma" },
+    { key: "EM", short: "EM", fullName: "Engineering Mechanics", faculty: "Prof. Vikram Rao" },
+    { key: "PPS", short: "PPS", fullName: "Programming for Problem Solving", faculty: "Prof. Neha Verma" },
+    { key: "IIKS", short: "IIKS", fullName: "Indian Knowledge System", faculty: "Prof. Amit Desai" }
+  ],
+
+  /* Attendance logs per subject (drives Student Dashboard, Attendance tab, and Chemistry detail modal) */
+  attendance: {
+    Maths: [
+      { date: "18/08", time: "10:30 - 11:30", status: "Present" },
+      { date: "19/08", time: "11:30 - 12:30", status: "Present" },
+      { date: "20/08", time: "11:30 - 12:30", status: "Present" },
+      { date: "21/08", time: "11:30 - 12:30", status: "Present" },
+      { date: "22/08", time: "09:30 - 10:30", status: "Absent" },
+      { date: "25/08", time: "10:30 - 11:30", status: "Present" },
+      { date: "26/08", time: "11:30 - 12:30", status: "Present" },
+      { date: "27/08", time: "11:30 - 12:30", status: "Present" }
+    ],
+    Chemistry: [
+      { date: "18/08", time: "08:30 - 09:30", status: "Present" },
+      { date: "19/08", time: "11:30 - 12:30", status: "Absent" },
+      { date: "19/08", time: "12:30 - 13:30", status: "Present" },
+      { date: "21/08", time: "08:30 - 09:30", status: "Cancelled" },
+      { date: "21/08", time: "14:30 - 15:30", status: "Present" },
+      { date: "25/08", time: "11:30 - 12:30", status: "Present" },
+      { date: "26/08", time: "12:30 - 13:30", status: "Present" },
+      { date: "27/08", time: "10:30 - 11:30", status: "Present" },
+      { date: "28/08", time: "11:30 - 12:30", status: "Present" },
+      { date: "29/08", time: "09:30 - 10:30", status: "Present" }
+    ],
+    EM: [
+      { date: "18/08", time: "09:30 - 10:30", status: "Present" },
+      { date: "19/08", time: "11:30 - 12:30", status: "Present" },
+      { date: "20/08", time: "12:30 - 13:30", status: "Present" },
+      { date: "21/08", time: "10:30 - 11:30", status: "Present" },
+      { date: "25/08", time: "09:30 - 10:30", status: "Present" },
+      { date: "26/08", time: "11:30 - 12:30", status: "Present" }
+    ],
+    PPS: [
+      { date: "18/08", time: "12:30 - 13:30", status: "Present" },
+      { date: "19/08", time: "10:30 - 11:30", status: "Present" },
+      { date: "22/08", time: "11:30 - 12:30", status: "Present" },
+      { date: "25/08", time: "12:30 - 13:30", status: "Present" },
+      { date: "26/08", time: "10:30 - 11:30", status: "Present" }
+    ],
+    IIKS: [
+      { date: "19/08", time: "13:30 - 14:30", status: "Present" },
+      { date: "21/08", time: "13:30 - 14:30", status: "Absent" },
+      { date: "22/08", time: "12:30 - 13:30", status: "Present" },
+      { date: "26/08", time: "13:30 - 14:30", status: "Present" },
+      { date: "28/08", time: "13:30 - 14:30", status: "Present" },
+      { date: "29/08", time: "12:30 - 13:30", status: "Absent" },
+      { date: "30/08", time: "10:30 - 11:30", status: "Present" }
+    ]
+  },
+
+  /* Weekly Timetable (Sketch Page 2 Bottom + horizontal scrollable slots) */
+  timeSlots: ["09:30", "10:30", "11:30", "12:30", "13:30", "14:30"],
+  timetable: {
+    Mon: {
+      "09:30": { subject: "EM", faculty: "Prof. Rao" },
+      "10:30": { subject: "Math", faculty: "Prof. Joshi" },
+      "11:30": { subject: "Chem", faculty: "Prof. Sharma" },
+      "12:30": { subject: "PPS", faculty: "Prof. Verma" },
+      "13:30": null,
+      "14:30": { subject: "PPS Lab", faculty: "Prof. Verma" }
+    },
+    Tue: {
+      "09:30": null,
+      "10:30": { subject: "PPS", faculty: "Prof. Verma" },
+      "11:30": { subject: "EM", faculty: "Prof. Rao" },
+      "12:30": { subject: "Chem", faculty: "Prof. Sharma" },
+      "13:30": { subject: "IIKS", faculty: "Prof. Desai" },
+      "14:30": null
+    },
+    Wed: {
+      "09:30": null,
+      "10:30": null,
+      "11:30": { subject: "Math", faculty: "Prof. Joshi" },
+      "12:30": { subject: "EM", faculty: "Prof. Rao" },
+      "13:30": { subject: "Chem Lab", faculty: "Prof. Sharma" },
+      "14:30": { subject: "Chem Lab", faculty: "Prof. Sharma" }
+    },
+    Thu: {
+      "09:30": null,
+      "10:30": { subject: "EM", faculty: "Prof. Rao" },
+      "11:30": { subject: "Math", faculty: "Prof. Joshi" },
+      "12:30": { subject: "Chem", faculty: "Prof. Sharma" },
+      "13:30": { subject: "IIKS", faculty: "Prof. Desai" },
+      "14:30": null
+    },
+    Fri: {
+      "09:30": null,
+      "10:30": { subject: "Math", faculty: "Prof. Joshi" },
+      "11:30": { subject: "PPS", faculty: "Prof. Verma" },
+      "12:30": { subject: "IIKS", faculty: "Prof. Desai" },
+      "13:30": { subject: "EM Lab", faculty: "Prof. Rao" },
+      "14:30": null
+    },
+    Sat: {
+      "09:30": { subject: "PS Lab", faculty: "Prof. Verma" },
+      "10:30": { subject: "PS Lab", faculty: "Prof. Verma" },
+      "11:30": { subject: "Math Tut", faculty: "Prof. Joshi" },
+      "12:30": null,
+      "13:30": null,
+      "14:30": null
+    }
+  },
+
+  tomorrowTimetable: [
+    { subject: "EM", time: "09:30 - 10:30" },
+    { subject: "Math", time: "10:30 - 11:30" },
+    { subject: "Chem", time: "11:30 - 12:30" },
+    { subject: "PPS", time: "12:30 - 13:30" }
+  ],
+
+  submissions: {
+    daily: [
+      { date: "11/08", title: "EM Practical" },
+      { date: "12/08", title: "Nothing" }
+    ],
+    thisWeek: [
+      { title: "Chem PPT", date: "13/08" },
+      { title: "PPS PPT", date: "17/08" }
+    ],
+    thisMonth: [
+      { title: "IIKS PPT", date: "21/08" },
+      { title: "EM Practical", date: "29/08" }
+    ],
+    allList: [
+      { topic: "EM Practical", date: "27/08" },
+      { topic: "Chem Prac", date: "29/08" },
+      { topic: "Chem Presentation", date: "03/09" },
+      { topic: "PPS Lab Journal", date: "08/09" },
+      { topic: "IIKS Essay", date: "12/09" }
+    ]
+  },
+
+  /* Announcements (Sketch Page 3 Top & Page 4 Top) */
+  announcements: [
+    {
+      id: "ann-1",
+      category: "Academic",
+      title: "Submission of Aadhaar Card Xerox",
+      body: "Please submit a clear photocopy of your Aadhaar card to the TCET Admin Office (Room 104) by 29 September for Mumbai University enrollment verification.",
+      contact: "Prof. Rajesh Sharma on +91 98201 11223",
+      author: "Prof. Rajesh Sharma",
+      date: "20/08/2026"
+    },
+    {
+      id: "ann-2",
+      category: "Academic",
+      title: "ISE 1 Examination Hall Tickets Released",
+      body: "Students of FE AI & ML Division B can collect their signed ISE 1 hall tickets from the class coordinator before 4:00 PM on Friday.",
+      contact: "Prof. Sneha Joshi on +91 98201 44556",
+      author: "Exam Cell, TCET",
+      date: "18/08/2026"
+    },
+    {
+      id: "ann-3",
+      category: "Academic",
+      title: "Engineering Chemistry Lab Safety Coat Mandatory",
+      body: "All first-year students must bring their white laboratory apron and practical journal for every Chemistry lab session starting next week.",
+      contact: "Prof. Rajesh Sharma on +91 98201 11223",
+      author: "Chemistry Dept.",
+      date: "16/08/2026"
+    },
+    {
+      id: "ann-4",
+      category: "Academic",
+      title: "PS Group Project Progress Review",
+      body: "All FE Project Seminar groups (Groups 1 to 10) must present their working prototype and code documentation during Saturday's PS Lab slot.",
+      contact: "Prof. Neha Verma on +91 98201 77889",
+      author: "AIML Department",
+      date: "14/08/2026"
+    },
+    {
+      id: "ann-5",
+      category: "Events",
+      title: "Zephyr 2026 Technical Fest Registrations Open",
+      body: "Register for coding hackathons, robotics challenges, and AI workshops at TCET's annual technical festival Zephyr 2026.",
+      contact: "Student Council Desk, Ground Floor",
+      author: "TCET Student Council",
+      date: "21/08/2026"
+    },
+    {
+      id: "ann-6",
+      category: "Events",
+      title: "AI & ML Club Introductory Bootcamp",
+      body: "Join the hands-on Python and Machine Learning orientation session in the Auditorium this Saturday at 2:00 PM.",
+      contact: "AIML Student Chapter",
+      author: "TCET AI Club",
+      date: "19/08/2026"
+    },
+    {
+      id: "ann-7",
+      category: "Events",
+      title: "Inter-Department Chess & Table Tennis Trials",
+      body: "Interested FE students can report to the TCET Gymkhana at 4:30 PM with their college ID card for selection trials.",
+      contact: "Sports Coordinator, Gymkhana",
+      author: "TCET Sports Committee",
+      date: "15/08/2026"
+    }
+  ],
+
+  /* Exams (Sketch Page 3 Bottom & Page 4 Bottom) */
+  exams: {
+    "ISE 1": {
+      status: "published",
+      subjects: { Math: 80, Chem: 75, EM: 90, PPS: 95, IIKS: 85 }
+    },
+    "ISE 2": {
+      status: "published",
+      subjects: { Math: 78, Chem: 74, EM: 86, PPS: 76, IIKS: 81 }
+    },
+    "ISE 3": {
+      status: "published",
+      subjects: { Math: 84, Chem: 79, EM: 92, PPS: 74, IIKS: 86 }
+    },
+    "IE": {
+      status: "published",
+      subjects: { Math: 78, Chem: 72, EM: 92, PPS: 65, IIKS: 78 }
+    },
+    "Term Work": {
+      status: "pending",
+      subjects: { Math: null, Chem: null, EM: null, PPS: null, IIKS: null }
+    },
+    "Practicals": {
+      status: "pending",
+      subjects: { Math: null, Chem: null, EM: null, PPS: null, IIKS: null }
+    },
+    "End Sem": {
+      status: "pending",
+      subjects: { Math: null, Chem: null, EM: null, PPS: null, IIKS: null }
+    }
+  },
+
+  /* Syllabus Modules (Sketch Page 5 Top & Page 6 Top) */
+  syllabus: {
+    Maths: [
+      { id: "I", title: "Matrices", completion: 100 },
+      { id: "II", title: "Vectors", completion: 80 },
+      { id: "III", title: "Complex Numbers", completion: 60 },
+      { id: "IV", title: "Calculus", completion: 0 }
+    ],
+    PPS: [
+      { id: "I", title: "Algorithms & Flowcharts", completion: 70 },
+      { id: "II", title: "C Fundamentals & Operators", completion: 50 },
+      { id: "III", title: "Control Statements & Loops", completion: 0 },
+      { id: "IV", title: "Functions, Arrays & Pointers", completion: 0 }
+    ],
+    Chem: [
+      { id: "I", title: "Atomic & Molecular Structure", completion: 90 },
+      { id: "II", title: "Water Technology", completion: 80 },
+      { id: "III", title: "Polymers & Nanomaterials", completion: 50 },
+      { id: "IV", title: "Green Chemistry & Fuels", completion: 0 }
+    ],
+    IIKS: [
+      { id: "I", title: "Foundations of Indian Knowledge System", completion: 100 },
+      { id: "II", title: "Ancient Indian Mathematics & Astronomy", completion: 100 },
+      { id: "III", title: "Town Planning & Architecture", completion: 68 },
+      { id: "IV", title: "Traditional Healthcare & Sustainability", completion: 0 }
+    ],
+    EM: [
+      { id: "I", title: "System of Coplanar Forces", completion: 90 },
+      { id: "II", title: "Equilibrium of Rigid Bodies", completion: 78 },
+      { id: "III", title: "Friction & Centroid", completion: 0 },
+      { id: "IV", title: "Kinematics of Particles", completion: 0 }
+    ]
+  },
+
+  /* YPT-Style Study Timer, Daily To-Do & TCET Group Leaderboard */
+  studyTracker: {
+    dailyGoalMinutes: 240,
+    streakDays: 5,
+    subjectSeconds: {
+      Maths: 3300,
+      Chemistry: 2400,
+      EM: 1800,
+      PPS: 2700,
+      IIKS: 900
+    },
+    todos: [
+      { id: "todo-1", subject: "Maths", text: "Solve 10 Matrices & Rank problems", done: true },
+      { id: "todo-2", subject: "PPS", text: "Practice C pointers & arrays lab questions", done: false },
+      { id: "todo-3", subject: "Chemistry", text: "Revise Water Technology numericals", done: false }
+    ],
+    sessions: [
+      { subject: "Maths", start: "07:15", end: "08:10", seconds: 3300 },
+      { subject: "PPS", start: "08:30", end: "09:15", seconds: 2700 },
+      { subject: "Chemistry", start: "09:30", end: "10:10", seconds: 2400 }
+    ],
+    peers: [
+      { id: "STU202602", name: "Ananya Kulkarni", status: "Studying", activeSubject: "Maths", secondsToday: 12900 },
+      { id: "STU202603", name: "Rohan Patil", status: "Studying", activeSubject: "PPS", secondsToday: 9600 },
+      { id: "STU202604", name: "Priya Nair", status: "On Break", activeSubject: "EM", secondsToday: 7200 }
+    ]
+  }
+};
+
+
+/* ==========================================================================
+   Real-Time Database Layer (js/database.js)
+   --------------------------------------------------------------------------
+   Supports TWO seamlessly integrated backend modes:
+   1. Firebase Realtime Database (Cloud Mode): When a Firebase databaseURL is
+      configured in js/firebase-config.js or Admin -> Database Settings, every
+      save pushes JSON to Firebase via HTTPS REST API and polls live updates.
+   2. Local Real-Time Sync (Instant Demo Mode): Persists data in localStorage
+      and broadcasts every change across browser tabs via BroadcastChannel +
+      storage events so Teacher -> Student attendance updates happen LIVE!
+   ========================================================================== */
+
+window.TCET_DB = (function () {
+  const STORAGE_KEY = "tcet_erp_group6_db_v1";
+  const FB_URL_KEY = "tcet_erp_firebase_url_v1";
+  const CHANNEL_NAME = "tcet_erp_live_sync_channel";
+
+  let state = null;
+  let listeners = [];
+  let channel = null;
+  let pollTimer = null;
+  let lastSavedHash = "";
+
+  function deepClone(obj) {
+    return JSON.parse(JSON.stringify(obj));
+  }
+
+  function getFirebaseUrl() {
+    let saved = "";
+    try {
+      saved = localStorage.getItem(FB_URL_KEY) || "";
+    } catch (e) {}
+    const fromConfig = (window.TCET_FIREBASE_CONFIG && window.TCET_FIREBASE_CONFIG.databaseURL) || "";
+    const url = (saved || fromConfig).trim().replace(/\/+$/, "");
+    return url.startsWith("https://") ? url : "";
+  }
+
+  function setFirebaseUrl(url) {
+    const clean = (url || "").trim().replace(/\/+$/, "");
+    try {
+      if (clean) localStorage.setItem(FB_URL_KEY, clean);
+      else localStorage.removeItem(FB_URL_KEY);
+    } catch (e) {}
+    startFirebasePolling();
+    if (clean) {
+      pushToFirebase(state);
+    }
+    notifyListeners("Database mode updated");
+  }
+
+  function loadInitialState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (!parsed.studyTracker && window.TCET_INITIAL_DATA.studyTracker) {
+          parsed.studyTracker = deepClone(window.TCET_INITIAL_DATA.studyTracker);
+        }
+        return parsed;
+      }
+    } catch (e) {}
+    return deepClone(window.TCET_INITIAL_DATA);
+  }
+
+  function persistLocal(data) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {}
+  }
+
+  async function pushToFirebase(data) {
+    const fbUrl = getFirebaseUrl();
+    if (!fbUrl) return;
+    try {
+      await fetch(fbUrl + "/tcet_erp_group6.json", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+    } catch (err) {
+      console.warn("Firebase write skipped/offline:", err);
+    }
+  }
+
+  async function pullFromFirebase() {
+    const fbUrl = getFirebaseUrl();
+    if (!fbUrl) return;
+    try {
+      const res = await fetch(fbUrl + "/tcet_erp_group6.json");
+      if (!res.ok) return;
+      const remote = await res.json();
+      if (remote && remote.attendance && remote.users) {
+        const remoteStr = JSON.stringify(remote);
+        if (remoteStr !== lastSavedHash) {
+          lastSavedHash = remoteStr;
+          state = remote;
+          persistLocal(state);
+          notifyListeners("Live cloud update received from Firebase");
+        }
+      }
+    } catch (err) {
+      console.warn("Firebase poll offline:", err);
+    }
+  }
+
+  function startFirebasePolling() {
+    if (pollTimer) {
+      clearInterval(pollTimer);
+      pollTimer = null;
+    }
+    if (getFirebaseUrl()) {
+      pullFromFirebase();
+      pollTimer = setInterval(pullFromFirebase, 3000);
+    }
+  }
+
+  function notifyListeners(reason) {
+    listeners.forEach(function (fn) {
+      try {
+        fn(state, reason);
+      } catch (e) {}
+    });
+  }
+
+  function init() {
+    state = loadInitialState();
+    lastSavedHash = JSON.stringify(state);
+    persistLocal(state);
+
+    /* Real-time cross-tab sync via BroadcastChannel */
+    if (typeof BroadcastChannel !== "undefined") {
+      try {
+        channel = new BroadcastChannel(CHANNEL_NAME);
+        channel.onmessage = function (ev) {
+          if (ev.data && ev.data.payload) {
+            state = ev.data.payload;
+            lastSavedHash = JSON.stringify(state);
+            persistLocal(state);
+            notifyListeners(ev.data.reason || "Live update received");
+          }
+        };
+      } catch (e) {}
+    }
+
+    /* Fallback cross-tab sync via window storage event */
+    window.addEventListener("storage", function (ev) {
+      if (ev.key === STORAGE_KEY && ev.newValue) {
+        try {
+          state = JSON.parse(ev.newValue);
+          lastSavedHash = ev.newValue;
+          notifyListeners("Live update received");
+        } catch (e) {}
+      }
+    });
+
+    startFirebasePolling();
+  }
+
+  function getState() {
+    if (!state) init();
+    return state;
+  }
+
+  function saveState(mutatorFn, reason) {
+    if (!state) init();
+    mutatorFn(state);
+    lastSavedHash = JSON.stringify(state);
+    persistLocal(state);
+
+    if (channel) {
+      try {
+        channel.postMessage({ payload: state, reason: reason || "Data updated" });
+      } catch (e) {}
+    }
+
+    pushToFirebase(state);
+    notifyListeners(reason || "Saved");
+  }
+
+  function resetDemoData() {
+    state = deepClone(window.TCET_INITIAL_DATA);
+    lastSavedHash = JSON.stringify(state);
+    persistLocal(state);
+    if (channel) {
+      try {
+        channel.postMessage({ payload: state, reason: "Demo data reset" });
+      } catch (e) {}
+    }
+    pushToFirebase(state);
+    notifyListeners("Demo data restored to defaults");
+  }
+
+  function subscribe(fn) {
+    listeners.push(fn);
+  }
+
+  /* Helper: Get attendance logs for a specific student (falls back to shared base logs) */
+  function getStudentAttendanceLogs(subjectKey, studentId) {
+    const s = getState();
+    const baseLogs = (s.attendance && s.attendance[subjectKey]) || [];
+    if (studentId && s.attendanceByStudent && s.attendanceByStudent[studentId] && s.attendanceByStudent[studentId][subjectKey]) {
+      return s.attendanceByStudent[studentId][subjectKey];
+    }
+    return baseLogs;
+  }
+
+  /* Helper: Compute attendance percentage for a subject (ignores Cancelled) */
+  function calcSubjectAttendance(subjectKey, studentId) {
+    const logs = getStudentAttendanceLogs(subjectKey, studentId);
+    let present = 0;
+    let conducted = 0;
+    logs.forEach(function (entry) {
+      if (entry.status === "Present") {
+        present++;
+        conducted++;
+      } else if (entry.status === "Absent") {
+        conducted++;
+      }
+    });
+    return conducted === 0 ? 100 : Math.round((present / conducted) * 100);
+  }
+
+  function calcOverallAttendance(studentId) {
+    const keys = Object.keys(getState().attendance || {});
+    if (!keys.length) return 0;
+    let total = 0;
+    keys.forEach(function (k) {
+      total += calcSubjectAttendance(k, studentId);
+    });
+    return Math.round(total / keys.length);
+  }
+
+  function calcExamOverall(examName) {
+    const exam = getState().exams[examName];
+    if (!exam || exam.status !== "published") return null;
+    const vals = Object.values(exam.subjects).filter(function (v) {
+      return typeof v === "number";
+    });
+    if (!vals.length) return null;
+    return Math.round(vals.reduce(function (a, b) { return a + b; }, 0) / vals.length);
+  }
+
+  function calcAllExamsOverall() {
+    const names = Object.keys(getState().exams || {});
+    const scores = [];
+    names.forEach(function (n) {
+      const avg = calcExamOverall(n);
+      if (avg !== null) scores.push(avg);
+    });
+    if (!scores.length) return 0;
+    return Math.round(scores.reduce(function (a, b) { return a + b; }, 0) / scores.length);
+  }
+
+  function calcSubjectExamAverage(shortSub) {
+    const exams = getState().exams || {};
+    const scores = [];
+    Object.keys(exams).forEach(function (name) {
+      const ex = exams[name];
+      if (ex.status === "published" && typeof ex.subjects[shortSub] === "number") {
+        scores.push(ex.subjects[shortSub]);
+      }
+    });
+    if (!scores.length) return 0;
+    return Math.round(scores.reduce(function (a, b) { return a + b; }, 0) / scores.length);
+  }
+
+  function calcSyllabusSubjectPct(subKey) {
+    const mods = (getState().syllabus && getState().syllabus[subKey]) || [];
+    if (!mods.length) return 0;
+    const sum = mods.reduce(function (a, m) { return a + Number(m.completion || 0); }, 0);
+    return Math.round(sum / mods.length);
+  }
+
+  function calcOverallSyllabusPct() {
+    const keys = Object.keys(getState().syllabus || {});
+    if (!keys.length) return 0;
+    const sum = keys.reduce(function (a, k) { return a + calcSyllabusSubjectPct(k); }, 0);
+    return Math.round(sum / keys.length);
+  }
+
+  return {
+    init: init,
+    getState: getState,
+    saveState: saveState,
+    resetDemoData: resetDemoData,
+    subscribe: subscribe,
+    getFirebaseUrl: getFirebaseUrl,
+    setFirebaseUrl: setFirebaseUrl,
+    getStudentAttendanceLogs: getStudentAttendanceLogs,
+    calcSubjectAttendance: calcSubjectAttendance,
+    calcOverallAttendance: calcOverallAttendance,
+    calcExamOverall: calcExamOverall,
+    calcAllExamsOverall: calcAllExamsOverall,
+    calcSubjectExamAverage: calcSubjectExamAverage,
+    calcSyllabusSubjectPct: calcSyllabusSubjectPct,
+    calcOverallSyllabusPct: calcOverallSyllabusPct
+  };
+})();
+
+
+/* ==========================================================================
+   Authentication & Login Screen (js/auth.js)
+   Handles 3-role login: Student, Teacher, Administrator
+   ========================================================================== */
+
+window.TCET_AUTH = (function () {
+  let selectedRole = "student";
+  let loginError = "";
+
+  const DEMO_CREDS = {
+    student: { id: "STU202601", pass: "student123" },
+    teacher: { id: "FAC202601", pass: "teacher123" },
+    admin:   { id: "ADM202601", pass: "admin123" }
+  };
+
+  function getLogoSvg(_size) {
+    return '<img src="data:image/jpeg;base64,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" alt="TCET Mumbai Logo" class="tcet-logo-img" />';
+  }
+
+  function setRole(role) {
+    selectedRole = role;
+    loginError = "";
+    window.TCET_APP.render();
+  }
+
+  function quickLogin(role) {
+    selectedRole = role;
+    const creds = DEMO_CREDS[role];
+    attemptLogin(creds.id, creds.pass, role);
+  }
+
+  function attemptLogin(userId, password, roleOverride) {
+    const role = roleOverride || selectedRole;
+    const state = window.TCET_DB.getState();
+    const listMap = {
+      student: state.users.students,
+      teacher: state.users.teachers,
+      admin:   state.users.admins
+    };
+    const pool = listMap[role] || [];
+    const found = pool.find(function (u) {
+      return u.id.toLowerCase() === (userId || "").trim().toLowerCase() && u.password === password;
+    });
+
+    if (!found) {
+      loginError = "Invalid ID or password for " + role + " login. Use the Quick Demo buttons on the left.";
+      window.TCET_APP.render();
+      return;
+    }
+
+    loginError = "";
+    window.TCET_APP.setSession({ role: role, userId: found.id });
+    window.TCET_APP.showToast("Signed in as " + found.name + " (" + role.toUpperCase() + ")");
+  }
+
+  function handleFormSubmit(ev) {
+    ev.preventDefault();
+    const idEl = document.getElementById("login-userid");
+    const pwEl = document.getElementById("login-password");
+    attemptLogin(idEl ? idEl.value : "", pwEl ? pwEl.value : "");
+  }
+
+  function render() {
+    const isCloud = Boolean(window.TCET_DB.getFirebaseUrl());
+    const creds = DEMO_CREDS[selectedRole];
+    const btnClass =
+      selectedRole === "teacher"
+        ? "btn-primary btn-teacher"
+        : selectedRole === "admin"
+        ? "btn-primary btn-admin"
+        : "btn-primary";
+
+    return (
+      '<div class="login-wrapper">' +
+        '<div class="login-card">' +
+          '<div class="login-brand">' +
+            '<div class="brand-top">' +
+              '<div class="brand-logo-box">' + getLogoSvg(30) + "</div>" +
+              "<div>" +
+                '<h1 class="brand-title">TCET Mumbai ERP</h1>' +
+                '<p class="brand-sub">Thakur College of Engineering &amp; Technology</p>' +
+              "</div>" +
+            "</div>" +
+            '<div class="brand-hero">' +
+              "<h2>Group 6 PS — Unified Campus Portal</h2>" +
+              "<p>Separate dashboards for Students, Faculty, and Administrators with real-time attendance sync, exam analytics, syllabus tracking, and digital circulars.</p>" +
+            "</div>" +
+            '<div class="demo-box">' +
+              '<div class="demo-box-title">' +
+                "<span>1-Click Viva Demo Login</span>" +
+                '<span class="db-badge ' + (isCloud ? "cloud" : "") + '"><span class="db-dot"></span>' + (isCloud ? "Firebase Cloud" : "Live Sync Ready") + "</span>" +
+              "</div>" +
+              '<div style="opacity:0.9;margin-bottom:6px;">Open two tabs (Teacher + Student) to see live attendance updates!</div>' +
+              '<div class="demo-quick-btns">' +
+                '<button type="button" class="demo-btn" data-action="quick-login" data-role="student">Student Demo (STU202601)</button>' +
+                '<button type="button" class="demo-btn" data-action="quick-login" data-role="teacher">Teacher Demo (FAC202601)</button>' +
+                '<button type="button" class="demo-btn" data-action="quick-login" data-role="admin">Admin Demo (ADM202601)</button>' +
+              "</div>" +
+            "</div>" +
+          "</div>" +
+
+          '<div class="login-form-pane">' +
+            '<h2 style="margin:0 0 6px;font-size:22px;font-weight:800;">Sign in to your Portal</h2>' +
+            '<p style="margin:0 0 18px;font-size:13.5px;color:#475569;">Select your role to launch your dedicated dashboard.</p>' +
+            '<div class="role-tabs">' +
+              '<button type="button" class="role-tab ' + (selectedRole === "student" ? "active-student" : "") + '" data-action="select-role" data-role="student">Student</button>' +
+              '<button type="button" class="role-tab ' + (selectedRole === "teacher" ? "active-teacher" : "") + '" data-action="select-role" data-role="teacher">Teacher</button>' +
+              '<button type="button" class="role-tab ' + (selectedRole === "admin" ? "active-admin" : "") + '" data-action="select-role" data-role="admin">Administrator</button>' +
+            "</div>" +
+            (loginError ? '<div class="login-error">' + loginError + "</div>" : "") +
+            '<form id="login-form">' +
+              '<div class="form-group">' +
+                '<label for="login-userid">' + selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1) + ' ID</label>' +
+                '<input id="login-userid" class="form-input" type="text" value="' + creds.id + '" required />' +
+              "</div>" +
+              '<div class="form-group">' +
+                '<label for="login-password">Password</label>' +
+                '<input id="login-password" class="form-input" type="password" value="' + creds.pass + '" required />' +
+              "</div>" +
+              '<button type="submit" class="' + btnClass + '">Login as ' + selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1) + "</button>" +
+            "</form>" +
+            '<p style="margin:14px 0 0;font-size:12px;color:#64748b;text-align:center;">FE AI &amp; ML Division B &bull; Academic Year 2026–27</p>' +
+          "</div>" +
+        "</div>" +
+      "</div>"
+    );
+  }
+
+  return {
+    getLogoSvg: getLogoSvg,
+    setRole: setRole,
+    quickLogin: quickLogin,
+    handleFormSubmit: handleFormSubmit,
+    render: render
+  };
+})();
+
+
+/* ==========================================================================
+   Student Portal (js/student-portal.js)
+   Strictly implements every view and clickable popup from the 7-page
+   Group 6 PS Rough Sketch PDF:
+   - Dashboard (Page 2 Top)
+   - Time Table + Horizontal Slider + Submissions (Page 2 Bottom)
+   - Announcements: Academic & Events + Detail Modal (Page 3 Top, Page 4 Top)
+   - Exams: ISE 1/2/3, IE, Term Work, Practicals, End Sem + Detail Modal (Page 3 Bottom, Page 4 Bottom)
+   - Syllabus + "Click to view pdf" + Subject Modules Modal (Page 5 Top, Page 6 Top)
+   - Attendance + Subject Attendance Modal with Vertical Slider (Page 5 Bottom, Page 6 Bottom)
+   - Profile Modal with Avatar Edit Pencil (Page 7)
+   ========================================================================== */
+
+window.TCET_STUDENT = (function () {
+  let activeTab = "Dashboard";
+  let currentStudentId = "";
+
+  const TABS = [
+    "Dashboard",
+    "Time Table",
+    "Announcements",
+    "Exams",
+    "Syllabus",
+    "Attendance",
+    "Study Timer"
+  ];
+
+  /* YPT Study Timer live state */
+  let yptMode = "stopwatch"; /* "stopwatch" or "pomodoro" */
+  let yptSubject = "Maths";
+  let yptRunning = false;
+  let yptElapsed = 0;        /* current unsaved session seconds */
+  let yptPomoRemaining = 25 * 60;
+  let yptInterval = null;
+  let yptStartClock = "";
+
+  function getTab() {
+    return activeTab;
+  }
+
+  function setTab(tab) {
+    activeTab = tab;
+    window.TCET_APP.render();
+  }
+
+  function pctClass(val) {
+    if (val >= 85) return "pct-high";
+    if (val >= 75) return "pct-mid";
+    return "pct-low";
+  }
+
+  function getStudent(userId) {
+    const list = window.TCET_DB.getState().users.students;
+    return list.find(function (s) { return s.id === userId; }) || list[0];
+  }
+
+  function renderDashboard(student) {
+    const db = window.TCET_DB;
+    const state = db.getState();
+
+    const dailyHtml = state.submissions.daily.map(function (item) {
+      const isEmpty = item.title.toLowerCase() === "nothing";
+      return (
+        '<div class="day-sub-block">' +
+          '<div class="day-sub-label">' + item.date + "</div>" +
+          '<div class="day-sub-box ' + (isEmpty ? "empty" : "") + '">' + item.title + "</div>" +
+        "</div>"
+      );
+    }).join("");
+
+    const weekHtml = state.submissions.thisWeek.map(function (item) {
+      return '<div class="period-sub-row"><span>' + item.title + "</span><strong>" + item.date + "</strong></div>";
+    }).join("");
+
+    const monthHtml = state.submissions.thisMonth.map(function (item) {
+      return '<div class="period-sub-row"><span>' + item.title + "</span><strong>" + item.date + "</strong></div>";
+    }).join("");
+
+    const tomorrowHtml = state.tomorrowTimetable.map(function (slot) {
+      return '<div class="tomorrow-row"><strong>' + slot.subject + "</strong><span>" + slot.time + "</span></div>";
+    }).join("");
+
+    const attList = [
+      { label: "Math", key: "Maths" },
+      { label: "EM", key: "EM" },
+      { label: "Chem", key: "Chemistry" },
+      { label: "IIKS", key: "IIKS" },
+      { label: "PPS", key: "PPS" }
+    ];
+    const attHtml = attList.map(function (sub) {
+      const pct = db.calcSubjectAttendance(sub.key, student.id);
+      return (
+        '<div class="mini-att-row" data-action="open-attendance-modal" data-subject="' + sub.key + '">' +
+          "<strong>" + sub.label + "</strong>" +
+          '<span class="pct-pill ' + pctClass(pct) + '">' + pct + "%</span>" +
+        "</div>"
+      );
+    }).join("");
+
+    const latestAnn = state.announcements.slice(0, 3).map(function (ann) {
+      return (
+        '<button type="button" class="announcement-pill" data-action="open-announcement-modal" data-id="' + ann.id + '">' +
+          "<span>" + ann.title + "</span>" +
+          "<small>" + ann.date.slice(0, 5) + "</small>" +
+        "</button>"
+      );
+    }).join("");
+
+    return (
+      '<div class="greeting-block">' +
+        "<h2>Hey " + student.name + ",</h2>" +
+        "<p>(" + student.year + ", " + student.sem + ", " + student.branch + " — Div " + student.division + ")</p>" +
+      "</div>" +
+      '<div class="dashboard-grid">' +
+        '<div class="dashboard-col">' +
+          '<div class="card">' +
+            '<h3 class="card-title">Upcoming Submissions</h3>' +
+            '<div class="submissions-split">' +
+              "<div>" + dailyHtml + "</div>" +
+              "<div>" +
+                '<div class="period-sub-group"><h4>This week</h4>' + weekHtml + "</div>" +
+                '<div class="period-sub-group"><h4>This month</h4>' + monthHtml + "</div>" +
+              "</div>" +
+            "</div>" +
+          "</div>" +
+          '<div class="card">' +
+            '<h3 class="card-title">Tomorrow\'s Time Table</h3>' +
+            tomorrowHtml +
+          "</div>" +
+        "</div>" +
+        '<div class="dashboard-col">' +
+          '<div class="card">' +
+            '<h3 class="card-title"><span>Attendance</span><small style="font-size:12px;color:#64748b;">Click subject</small></h3>' +
+            attHtml +
+          "</div>" +
+          '<div class="card">' +
+            '<h3 class="card-title">Announcements</h3>' +
+            latestAnn +
+          "</div>" +
+        "</div>" +
+      "</div>"
+    );
+  }
+
+  function renderTimeTable() {
+    const state = window.TCET_DB.getState();
+    const slots = state.timeSlots;
+    const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    const headerCells = "<th></th>" + slots.map(function (t) {
+      return "<th>" + t + "</th>";
+    }).join("");
+
+    const rowsHtml = days.map(function (day) {
+      const dayData = state.timetable[day] || {};
+      const cells = slots.map(function (t) {
+        const entry = dayData[t];
+        if (!entry) {
+          return '<td><div class="tt-slot-empty"></div></td>';
+        }
+        return (
+          '<td><div class="tt-slot-box">' +
+            "<strong>" + entry.subject + "</strong>" +
+            "<span>" + entry.faculty + "</span>" +
+          "</div></td>"
+        );
+      }).join("");
+      return '<tr><td class="tt-day-cell">' + day + "</td>" + cells + "</tr>";
+    }).join("");
+
+    const subRows = state.submissions.allList.map(function (s) {
+      return "<tr><td>" + s.topic + '</td><td class="right">' + s.date + "</td></tr>";
+    }).join("");
+
+    return (
+      '<div class="timetable-layout">' +
+        '<div class="card">' +
+          '<div id="tt-scroll-viewport" class="tt-scroll-viewport">' +
+            '<table class="tt-grid-table">' +
+              "<thead><tr>" + headerCells + "</tr></thead>" +
+              "<tbody>" + rowsHtml + "</tbody>" +
+            "</table>" +
+          "</div>" +
+          '<div class="slider-control-bar">' +
+            "<span>&larr; Slider &rarr;</span>" +
+            '<input id="tt-horizontal-slider" type="range" min="0" max="100" value="0" aria-label="Scroll timetable horizontally" />' +
+          "</div>" +
+        "</div>" +
+        '<div class="card">' +
+          '<h3 class="card-title">Submissions</h3>' +
+          '<table class="clickable-table">' +
+            '<thead><tr><th>Topic</th><th class="right">Date</th></tr></thead>' +
+            "<tbody>" + subRows + "</tbody>" +
+          "</table>" +
+        "</div>" +
+      "</div>"
+    );
+  }
+
+  function renderAnnouncements() {
+    const state = window.TCET_DB.getState();
+    const academic = state.announcements.filter(function (a) { return a.category === "Academic"; });
+    const events = state.announcements.filter(function (a) { return a.category === "Events"; });
+
+    function makePills(list) {
+      if (!list.length) return '<p style="color:#64748b;font-size:14px;">No announcements yet.</p>';
+      return list.map(function (a) {
+        return (
+          '<button type="button" class="announcement-pill" data-action="open-announcement-modal" data-id="' + a.id + '">' +
+            "<span>" + a.title + "</span>" +
+            "<small>" + a.date + "</small>" +
+          "</button>"
+        );
+      }).join("");
+    }
+
+    return (
+      '<div class="announcements-grid">' +
+        '<div class="card">' +
+          '<h3 class="column-header-rule">Academic</h3>' +
+          makePills(academic) +
+        "</div>" +
+        '<div class="card">' +
+          '<h3 class="column-header-rule">Events</h3>' +
+          makePills(events) +
+        "</div>" +
+      "</div>"
+    );
+  }
+
+  function renderExams() {
+    const db = window.TCET_DB;
+    const examOrder = ["ISE 1", "ISE 2", "ISE 3", "IE", "Term Work", "Practicals", "End Sem"];
+
+    const examButtons = examOrder.map(function (name) {
+      const avg = db.calcExamOverall(name);
+      const isFull = name === "End Sem";
+      return (
+        '<button type="button" class="exam-box-btn ' + (isFull ? "full-span" : "") + '" data-action="open-exam-modal" data-exam="' + name + '">' +
+          '<div class="exam-box-label">' + name + "</div>" +
+          '<div class="exam-box-score">' + (avg !== null ? avg + "%" : "&mdash; %") + "</div>" +
+        "</button>"
+      );
+    }).join("");
+
+    const overallPct = db.calcAllExamsOverall();
+    const subOrder = ["Math", "EM", "Chem", "PPS", "IIKS"];
+    const subRows = subOrder.map(function (s) {
+      return "<tr><td>" + s + '</td><td class="right">' + db.calcSubjectExamAverage(s) + "%</td></tr>";
+    }).join("");
+
+    return (
+      '<div class="exams-layout">' +
+        '<div class="card">' +
+          '<div class="exam-cards-grid">' + examButtons + "</div>" +
+        "</div>" +
+        '<div class="dashboard-col">' +
+          '<div class="card overall-big-card">' +
+            '<div style="font-size:16px;font-weight:800;color:#475569;">Overall</div>' +
+            '<div class="big-pct">' + overallPct + "%</div>" +
+          "</div>" +
+          '<div class="card">' +
+            '<table class="clickable-table">' +
+              '<thead><tr><th>Subject</th><th class="right">Marks</th></tr></thead>' +
+              "<tbody>" + subRows + "</tbody>" +
+            "</table>" +
+          "</div>" +
+        "</div>" +
+      "</div>"
+    );
+  }
+
+  function renderSyllabus() {
+    const db = window.TCET_DB;
+    const order = ["Maths", "PPS", "Chem", "IIKS", "EM"];
+    const rows = order.map(function (subKey) {
+      const pct = db.calcSyllabusSubjectPct(subKey);
+      return (
+        '<tr data-action="open-syllabus-modal" data-subject="' + subKey + '">' +
+          "<td>" + subKey + "</td>" +
+          '<td class="right">' + pct + "%</td>" +
+        "</tr>"
+      );
+    }).join("");
+
+    const overall = db.calcOverallSyllabusPct();
+
+    return (
+      '<div class="syllabus-top-action">' +
+        '<button type="button" class="btn-pdf-view" data-action="open-syllabus-pdf">Click to view pdf</button>' +
+      "</div>" +
+      '<div class="syllabus-layout">' +
+        '<div class="card">' +
+          '<table class="clickable-table">' +
+            '<thead><tr><th>Subject</th><th class="right">Completed</th></tr></thead>' +
+            "<tbody>" + rows + "</tbody>" +
+          "</table>" +
+        "</div>" +
+        '<div class="card overall-big-card">' +
+          '<div style="font-size:16px;font-weight:800;color:#475569;">Overall</div>' +
+          '<div class="big-pct">' + overall + "%</div>" +
+        "</div>" +
+      "</div>"
+    );
+  }
+
+  function renderAttendance(student) {
+    const db = window.TCET_DB;
+    const sid = student ? student.id : currentStudentId;
+    const overall = db.calcOverallAttendance(sid);
+    const subjects = ["Maths", "Chemistry", "EM", "PPS", "IIKS"];
+
+    const rows = subjects.map(function (subKey) {
+      const pct = db.calcSubjectAttendance(subKey, sid);
+      return (
+        '<div class="attendance-subject-row" data-action="open-attendance-modal" data-subject="' + subKey + '">' +
+          "<span>" + subKey + "</span>" +
+          "<span>" + pct + "%</span>" +
+        "</div>"
+      );
+    }).join("");
+
+    return (
+      '<div class="card attendance-main-card">' +
+        '<div class="attendance-overall-row">' +
+          "<h3>Overall</h3>" +
+          '<span class="overall-num">' + overall + "%</span>" +
+        "</div>" +
+        rows +
+        '<p style="margin:14px 0 0;font-size:12.5px;color:#64748b;text-align:center;">Click any subject to inspect date-wise lecture attendance. Updates automatically when your teacher marks attendance.</p>' +
+      "</div>"
+    );
+  }
+
+  /* ---- YPT Study Timer Helpers & View ---- */
+  function fmtHMS(totalSec) {
+    const s = Math.max(0, Math.floor(totalSec || 0));
+    const hrs = Math.floor(s / 3600);
+    const mins = Math.floor((s % 3600) / 60);
+    const secs = s % 60;
+    return (
+      String(hrs).padStart(2, "0") + ":" +
+      String(mins).padStart(2, "0") + ":" +
+      String(secs).padStart(2, "0")
+    );
+  }
+
+  function fmtShortHM(totalSec) {
+    const s = Math.max(0, Math.floor(totalSec || 0));
+    const hrs = Math.floor(s / 3600);
+    const mins = Math.floor((s % 3600) / 60);
+    return hrs + "h " + String(mins).padStart(2, "0") + "m";
+  }
+
+  function getStudyData() {
+    const state = window.TCET_DB.getState();
+    if (!state.studyTracker) {
+      state.studyTracker = JSON.parse(JSON.stringify(window.TCET_INITIAL_DATA.studyTracker));
+    }
+    return state.studyTracker;
+  }
+
+  function getMyTotalStudySeconds() {
+    const st = getStudyData();
+    const saved = Object.values(st.subjectSeconds || {}).reduce(function (a, b) {
+      return a + Number(b || 0);
+    }, 0);
+    return saved + yptElapsed;
+  }
+
+  function updateClockDom() {
+    const displayStr = yptMode === "pomodoro" ? fmtHMS(yptPomoRemaining) : fmtHMS(yptElapsed);
+    const mainClock = document.getElementById("ypt-clock-display");
+    if (mainClock) mainClock.textContent = displayStr;
+    const focusClock = document.getElementById("ypt-focus-clock");
+    if (focusClock) focusClock.textContent = displayStr;
+
+    const st = getStudyData();
+    const subSec = Number((st.subjectSeconds && st.subjectSeconds[yptSubject]) || 0) + yptElapsed;
+    const subClock = document.getElementById("ypt-sub-time-" + yptSubject);
+    if (subClock) subClock.textContent = fmtHMS(subSec);
+
+    const totalEl = document.getElementById("ypt-total-today");
+    if (totalEl) totalEl.textContent = fmtShortHM(getMyTotalStudySeconds());
+  }
+
+  function stopYptInterval() {
+    if (yptInterval) {
+      clearInterval(yptInterval);
+      yptInterval = null;
+    }
+  }
+
+  function yptToggleRun() {
+    if (yptRunning) {
+      yptRunning = false;
+      stopYptInterval();
+      window.TCET_APP.render();
+      return;
+    }
+    if (!yptStartClock) {
+      const now = new Date();
+      yptStartClock = String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0");
+    }
+    yptRunning = true;
+    stopYptInterval();
+    yptInterval = setInterval(function () {
+      yptElapsed += 1;
+      if (yptMode === "pomodoro") {
+        yptPomoRemaining = Math.max(0, yptPomoRemaining - 1);
+        if (yptPomoRemaining === 0) {
+          yptSaveSession();
+          window.TCET_APP.showToast("Pomodoro complete! 25m session logged to " + yptSubject + ".");
+          yptPomoRemaining = 25 * 60;
+          return;
+        }
+      }
+      updateClockDom();
+    }, 1000);
+    window.TCET_APP.render();
+  }
+
+  function yptSetMode(mode) {
+    if (yptMode === mode) return;
+    yptRunning = false;
+    stopYptInterval();
+    yptMode = mode;
+    if (mode === "pomodoro" && yptPomoRemaining === 0) {
+      yptPomoRemaining = 25 * 60;
+    }
+    window.TCET_APP.render();
+  }
+
+  function yptSelectSubject(subKey) {
+    if (yptElapsed >= 5 && subKey !== yptSubject) {
+      yptSaveSession();
+    }
+    yptSubject = subKey;
+    window.TCET_APP.render();
+  }
+
+  function yptResetTimer() {
+    yptRunning = false;
+    stopYptInterval();
+    yptElapsed = 0;
+    yptPomoRemaining = 25 * 60;
+    yptStartClock = "";
+    window.TCET_APP.render();
+  }
+
+  function yptSaveSession() {
+    yptRunning = false;
+    stopYptInterval();
+    const logged = yptElapsed;
+    if (logged < 1) {
+      window.TCET_APP.showToast("Start the timer first to log a study session.");
+      return;
+    }
+    const now = new Date();
+    const endClock = String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0");
+    const startClock = yptStartClock || endClock;
+    const sub = yptSubject;
+
+    yptElapsed = 0;
+    yptStartClock = "";
+    if (yptMode === "pomodoro") yptPomoRemaining = 25 * 60;
+
+    window.TCET_DB.saveState(function (s) {
+      if (!s.studyTracker) {
+        s.studyTracker = JSON.parse(JSON.stringify(window.TCET_INITIAL_DATA.studyTracker));
+      }
+      if (!s.studyTracker.subjectSeconds[sub]) s.studyTracker.subjectSeconds[sub] = 0;
+      s.studyTracker.subjectSeconds[sub] += logged;
+      s.studyTracker.sessions.unshift({
+        subject: sub,
+        start: startClock,
+        end: endClock,
+        seconds: logged
+      });
+    }, "Study session saved: " + sub + " (" + fmtHMS(logged) + ")");
+
+    window.TCET_APP.showToast("Saved " + fmtHMS(logged) + " to " + sub + " study tracker!");
+  }
+
+  function yptOpenFocusModal() {
+    const displayStr = yptMode === "pomodoro" ? fmtHMS(yptPomoRemaining) : fmtHMS(yptElapsed);
+    const html =
+      '<div class="modal-header">' +
+        "<h3>Focus Mode — " + yptSubject + "</h3>" +
+        '<button type="button" class="modal-close-btn" data-action="close-modal">&times;</button>' +
+      "</div>" +
+      '<div class="ypt-focus-overlay">' +
+        '<div class="ypt-active-sub-pill">' + (yptMode === "pomodoro" ? "Pomodoro 25m" : "Stopwatch") + " &bull; " + (yptRunning ? "Studying Now" : "Paused") + "</div>" +
+        '<div id="ypt-focus-clock" class="ypt-clock">' + displayStr + "</div>" +
+        '<p style="margin:0 0 20px;font-size:14px;color:#475569;">Stay in this distraction-free view until your study block finishes.</p>' +
+        '<div class="ypt-controls">' +
+          '<button type="button" class="btn-primary" data-action="ypt-toggle-focus">' + (yptRunning ? "Pause" : "Start Focus") + "</button>" +
+          '<button type="button" class="btn-outline" data-action="ypt-save-close">Save &amp; Exit</button>' +
+        "</div>" +
+      "</div>";
+    window.TCET_APP.openModal(html);
+  }
+
+  function renderStudyTimer(student) {
+    const st = getStudyData();
+    const subjects = ["Maths", "Chemistry", "EM", "PPS", "IIKS"];
+    const displayClock = yptMode === "pomodoro" ? fmtHMS(yptPomoRemaining) : fmtHMS(yptElapsed);
+    const totalSec = getMyTotalStudySeconds();
+    const goalSec = Math.max(60, Number(st.dailyGoalMinutes || 240) * 60);
+    const goalPct = Math.min(100, Math.round((totalSec / goalSec) * 100));
+
+    const subjectRows = subjects.map(function (subKey) {
+      const baseSec = Number((st.subjectSeconds && st.subjectSeconds[subKey]) || 0);
+      const liveSec = baseSec + (yptSubject === subKey ? yptElapsed : 0);
+      const isActive = yptSubject === subKey;
+      return (
+        '<div class="ypt-subject-row ' + (isActive ? "active" : "") + '" data-action="ypt-select-subject" data-subject="' + subKey + '">' +
+          '<div class="ypt-sub-left">' +
+            '<span class="ypt-play-icon">' + (isActive && yptRunning ? "&#10074;&#10074;" : "&#9654;") + "</span>" +
+            "<div>" +
+              "<strong>" + subKey + "</strong>" +
+              '<div style="font-size:12px;color:#64748b;">' + (isActive ? (yptRunning ? "Studying now..." : "Selected subject") : "Click to switch") + "</div>" +
+            "</div>" +
+          "</div>" +
+          '<span id="ypt-sub-time-' + subKey + '" class="ypt-sub-time">' + fmtHMS(liveSec) + "</span>" +
+        "</div>"
+      );
+    }).join("");
+
+    const todoItems = (st.todos || []).map(function (t) {
+      return (
+        '<div class="ypt-todo-item ' + (t.done ? "done" : "") + '">' +
+          '<label style="display:flex;align-items:center;gap:10px;cursor:pointer;flex:1;">' +
+            '<input type="checkbox" ' + (t.done ? "checked" : "") + ' data-action="ypt-toggle-todo" data-id="' + t.id + '" />' +
+            '<span class="todo-title" style="font-size:14px;font-weight:600;">' + t.text + "</span>" +
+          "</label>" +
+          '<div style="display:flex;align-items:center;gap:8px;">' +
+            '<span class="pct-pill pct-high" style="font-size:11.5px;">' + t.subject + "</span>" +
+            '<button type="button" class="btn-outline" style="padding:4px 8px;font-size:12px;" data-action="ypt-del-todo" data-id="' + t.id + '">&times;</button>' +
+          "</div>" +
+        "</div>"
+      );
+    }).join("");
+
+    const sessionRows = (st.sessions || []).slice(0, 6).map(function (ses) {
+      return (
+        "<tr>" +
+          "<td><strong>" + ses.subject + "</strong></td>" +
+          "<td>" + ses.start + " &ndash; " + ses.end + "</td>" +
+          '<td class="right">' + fmtHMS(ses.seconds) + "</td>" +
+        "</tr>"
+      );
+    }).join("");
+
+    /* Build live sorted TCET Study Group Leaderboard */
+    const groupList = (st.peers || []).map(function (p) {
+      return {
+        id: p.id,
+        name: p.name,
+        status: p.status,
+        activeSubject: p.activeSubject,
+        secondsToday: p.secondsToday,
+        isMe: false
+      };
+    });
+    groupList.push({
+      id: student.id,
+      name: student.name + " (You)",
+      status: yptRunning ? "Studying" : "On Break",
+      activeSubject: yptSubject,
+      secondsToday: totalSec,
+      isMe: true
+    });
+    groupList.sort(function (a, b) { return b.secondsToday - a.secondsToday; });
+
+    const groupRows = groupList.map(function (m, idx) {
+      const dotCls = m.status === "Studying" ? "ypt-status-studying" : (m.status === "On Break" ? "ypt-status-break" : "ypt-status-offline");
+      return (
+        '<div class="ypt-group-row ' + (m.isMe ? "is-me" : "") + '">' +
+          '<div style="display:flex;align-items:center;gap:10px;">' +
+            '<span class="ypt-rank-badge">#' + (idx + 1) + "</span>" +
+            "<div>" +
+              '<div style="font-size:14px;font-weight:700;">' + m.name + "</div>" +
+              '<div style="font-size:12px;color:#64748b;"><span class="ypt-status-dot ' + dotCls + '"></span>' + (m.status === "Studying" ? "Studying " + m.activeSubject : m.status) + "</div>" +
+            "</div>" +
+          "</div>" +
+          '<strong style="font-variant-numeric:tabular-nums;color:#1d4ed8;font-size:14px;">' + fmtShortHM(m.secondsToday) + "</strong>" +
+        "</div>"
+      );
+    }).join("");
+
+    const subOpts = subjects.map(function (s) {
+      return '<option value="' + s + '">' + s + "</option>";
+    }).join("");
+
+    return (
+      '<div class="dashboard-grid">' +
+        '<div class="dashboard-col">' +
+          '<div class="card">' +
+            '<div class="card-title">' +
+              "<span>Study Timer</span>" +
+              '<div class="ypt-mode-bar">' +
+                '<button type="button" class="ypt-mode-btn ' + (yptMode === "stopwatch" ? "active" : "") + '" data-action="ypt-mode" data-mode="stopwatch">Stopwatch</button>' +
+                '<button type="button" class="ypt-mode-btn ' + (yptMode === "pomodoro" ? "active" : "") + '" data-action="ypt-mode" data-mode="pomodoro">Pomodoro 25m</button>' +
+              "</div>" +
+            "</div>" +
+            '<div class="ypt-timer-stage">' +
+              '<div class="ypt-active-sub-pill">' + yptSubject + " &bull; " + (yptRunning ? "Live Focus Active" : "Ready") + "</div>" +
+              '<div id="ypt-clock-display" class="ypt-clock">' + displayClock + "</div>" +
+              '<div class="ypt-controls">' +
+                '<button type="button" class="btn-primary" data-action="ypt-toggle">' + (yptRunning ? "Pause Timer" : "Start Studying") + "</button>" +
+                '<button type="button" class="btn-outline" data-action="ypt-save">Save Session</button>' +
+                '<button type="button" class="btn-outline" data-action="ypt-reset">Reset</button>' +
+                '<button type="button" class="btn-outline" data-action="ypt-focus">Focus Mode</button>' +
+              "</div>" +
+            "</div>" +
+            subjectRows +
+          "</div>" +
+
+          '<div class="card">' +
+            '<h3 class="card-title">Daily Study To-Do &amp; Planner</h3>' +
+            '<form id="ypt-todo-form" class="toolbar-row" style="margin-bottom:14px;">' +
+              '<div class="form-group" style="flex:2;"><input id="ypt-todo-text" class="form-input" placeholder="Add study task (e.g. Revise EM Friction)" required /></div>' +
+              '<div class="form-group" style="flex:1;min-width:110px;"><select id="ypt-todo-sub" class="form-input">' + subOpts + "</select></div>" +
+              '<div><button type="submit" class="btn-primary" style="width:auto;padding:11px 16px;font-size:13.5px;">Add Task</button></div>' +
+            "</form>" +
+            (todoItems || '<p style="font-size:13.5px;color:#64748b;">No study tasks yet. Add your first goal above.</p>') +
+          "</div>" +
+        "</div>" +
+
+        '<div class="dashboard-col">' +
+          '<div class="card overall-big-card">' +
+            '<div style="font-size:15px;font-weight:800;color:#475569;">Today&apos;s Total Study</div>' +
+            '<div id="ypt-total-today" class="big-pct" style="font-size:38px;">' + fmtShortHM(totalSec) + "</div>" +
+            '<div class="ypt-progress-track"><div class="ypt-progress-fill" style="width:' + goalPct + '%;"></div></div>' +
+            '<div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;color:#475569;">' +
+              "<span>" + goalPct + "% of " + Math.round(goalSec / 3600) + "h Goal</span>" +
+              "<span>Streak: " + (st.streakDays || 1) + " Days</span>" +
+            "</div>" +
+          "</div>" +
+
+          '<div class="card">' +
+            '<h3 class="card-title"><span>FE AIML Study Group</span><small style="font-size:12px;color:#64748b;">Live Rank</small></h3>' +
+            groupRows +
+          "</div>" +
+
+          '<div class="card">' +
+            '<h3 class="card-title">Today&apos;s Study Timeline</h3>' +
+            '<table class="clickable-table">' +
+              '<thead><tr><th>Subject</th><th>Time</th><th class="right">Duration</th></tr></thead>' +
+              "<tbody>" + sessionRows + "</tbody>" +
+            "</table>" +
+          "</div>" +
+        "</div>" +
+      "</div>"
+    );
+  }
+
+  /* ---- Clickable Detail Modals (Sketch Pages 4, 6, 7) ---- */
+  function openAnnouncementModal(id) {
+    const ann = window.TCET_DB.getState().announcements.find(function (a) { return a.id === id; });
+    if (!ann) return;
+    const html =
+      '<div class="modal-header">' +
+        "<h3>" + ann.title + "</h3>" +
+        '<button type="button" class="modal-close-btn" data-action="close-modal">&times;</button>' +
+      "</div>" +
+      '<p style="font-size:15px;line-height:1.65;margin:0 0 14px;">' + ann.body + "</p>" +
+      '<p style="font-size:14.5px;margin:0 0 20px;color:#1e40af;font-weight:600;">In case of any queries, contact ' + ann.contact + ".</p>" +
+      '<div style="border-top:1px solid #e2e8f0;padding-top:12px;font-size:13.5px;color:#475569;">' +
+        "<div><strong>Announcement by " + ann.author + "</strong></div>" +
+        "<div>" + ann.date + "</div>" +
+      "</div>";
+    window.TCET_APP.openModal(html);
+  }
+
+  function openExamModal(examName) {
+    const db = window.TCET_DB;
+    const exam = db.getState().exams[examName];
+    if (!exam) return;
+    const avg = db.calcExamOverall(examName);
+    const fmt = function (v) { return typeof v === "number" ? v + "%" : "Pending"; };
+
+    const html =
+      '<div class="modal-header">' +
+        "<h3>" + examName + "</h3>" +
+        '<button type="button" class="modal-close-btn" data-action="close-modal">&times;</button>' +
+      "</div>" +
+      '<div class="exam-detail-row-3">' +
+        '<div class="exam-sub-card"><div class="sub-name">Math</div><div class="sub-val">' + fmt(exam.subjects.Math) + "</div></div>" +
+        '<div class="exam-sub-card"><div class="sub-name">Chem</div><div class="sub-val">' + fmt(exam.subjects.Chem) + "</div></div>" +
+        '<div class="exam-sub-card"><div class="sub-name">EM</div><div class="sub-val">' + fmt(exam.subjects.EM) + "</div></div>" +
+      "</div>" +
+      '<div class="exam-detail-row-2">' +
+        '<div class="exam-sub-card"><div class="sub-name">PPS</div><div class="sub-val">' + fmt(exam.subjects.PPS) + "</div></div>" +
+        '<div class="exam-sub-card"><div class="sub-name">IIKS</div><div class="sub-val">' + fmt(exam.subjects.IIKS) + "</div></div>" +
+      "</div>" +
+      '<div class="exam-overall-box">' +
+        '<div style="font-size:15px;font-weight:700;color:#475569;">Overall</div>' +
+        '<div style="font-size:32px;font-weight:900;color:#1d4ed8;">' + (avg !== null ? avg + "%" : "Pending") + "</div>" +
+      "</div>";
+    window.TCET_APP.openModal(html);
+  }
+
+  function openSyllabusModal(subKey) {
+    const db = window.TCET_DB;
+    const mods = db.getState().syllabus[subKey] || [];
+    const total = db.calcSyllabusSubjectPct(subKey);
+
+    const rows = mods.map(function (m) {
+      return "<tr><td><strong>" + m.id + " :</strong> " + m.title + '</td><td class="right">' + m.completion + "%</td></tr>";
+    }).join("");
+
+    const html =
+      '<div class="modal-header">' +
+        "<h3>" + subKey + " Syllabus</h3>" +
+        '<button type="button" class="modal-close-btn" data-action="close-modal">&times;</button>' +
+      "</div>" +
+      '<table class="clickable-table">' +
+        '<thead><tr><th>Module</th><th class="right">Completion</th></tr></thead>' +
+        "<tbody>" + rows + "</tbody>" +
+        '<tfoot><tr><td style="padding-top:16px;font-size:17px;font-weight:800;">Total</td><td class="right" style="padding-top:16px;font-size:18px;font-weight:900;color:#1d4ed8;">' + total + "%</td></tr></tfoot>" +
+      "</table>";
+    window.TCET_APP.openModal(html);
+  }
+
+  function openSyllabusPdfModal() {
+    const state = window.TCET_DB.getState();
+    const sections = Object.keys(state.syllabus).map(function (subKey) {
+      const items = state.syllabus[subKey].map(function (m) {
+        return "<li><strong>Module " + m.id + ":</strong> " + m.title + " (" + m.completion + "% completed)</li>";
+      }).join("");
+      return '<div style="margin-bottom:14px;"><h4 style="margin:0 0 6px;color:#1d4ed8;">' + subKey + "</h4><ul style=\"margin:0;padding-left:20px;font-size:14px;\">" + items + "</ul></div>";
+    }).join("");
+
+    const html =
+      '<div class="modal-header">' +
+        "<h3>TCET FE Sem I (AI &amp; ML) — Official Syllabus PDF</h3>" +
+        '<button type="button" class="modal-close-btn" data-action="close-modal">&times;</button>' +
+      "</div>" +
+      '<div style="background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:16px;margin-bottom:14px;">' +
+        sections +
+      "</div>" +
+      '<div style="display:flex;justify-content:flex-end;gap:10px;">' +
+        '<button type="button" class="btn-outline" data-action="print-syllabus">Print / Save as PDF</button>' +
+        '<button type="button" class="btn-outline" data-action="close-modal">Close</button>' +
+      "</div>";
+    window.TCET_APP.openModal(html);
+  }
+
+  function openAttendanceModal(subKey) {
+    const db = window.TCET_DB;
+    const logs = db.getStudentAttendanceLogs(subKey, currentStudentId).slice().reverse();
+    const pct = db.calcSubjectAttendance(subKey, currentStudentId);
+
+    const rows = logs.map(function (entry) {
+      return (
+        "<tr>" +
+          "<td><strong>" + entry.date + "</strong></td>" +
+          "<td>" + entry.time + "</td>" +
+          '<td class="right"><span class="status-badge status-' + entry.status + '">' + entry.status + "</span></td>" +
+        "</tr>"
+      );
+    }).join("");
+
+    const html =
+      '<div class="modal-header">' +
+        "<h3>" + subKey + " Attendance</h3>" +
+        '<button type="button" class="modal-close-btn" data-action="close-modal">&times;</button>' +
+      "</div>" +
+      '<div class="att-detail-layout">' +
+        '<div class="vertical-slider-rail" title="Vertical Attendance Slider">' +
+          '<input id="att-vertical-slider" type="range" min="0" max="100" value="0" aria-label="Scroll attendance list" />' +
+        "</div>" +
+        '<div id="att-detail-scroll" class="att-detail-scroll">' +
+          '<table class="data-table">' +
+            '<thead><tr><th>Date</th><th>Time</th><th style="text-align:right;">Status</th></tr></thead>' +
+            "<tbody>" + rows + "</tbody>" +
+          "</table>" +
+        "</div>" +
+      "</div>" +
+      '<div style="text-align:center;margin-top:16px;font-size:20px;font-weight:900;color:#1d4ed8;">Overall : ' + pct + "%</div>";
+
+    window.TCET_APP.openModal(html);
+
+    /* Wire up Sketch Page 6 Left Vertical Slider */
+    const slider = document.getElementById("att-vertical-slider");
+    const box = document.getElementById("att-detail-scroll");
+    if (slider && box) {
+      slider.addEventListener("input", function () {
+        const maxScroll = box.scrollHeight - box.clientHeight;
+        box.scrollTop = (Number(slider.value) / 100) * Math.max(0, maxScroll);
+      });
+      box.addEventListener("scroll", function () {
+        const maxScroll = box.scrollHeight - box.clientHeight;
+        if (maxScroll > 0) {
+          slider.value = String(Math.round((box.scrollTop / maxScroll) * 100));
+        }
+      });
+    }
+  }
+
+  function openProfileModal(studentId, editMode) {
+    const student = getStudent(studentId);
+    const initials = student.name.split(" ").map(function (w) { return w[0]; }).join("").slice(0, 2).toUpperCase();
+
+    const fieldsHtml = editMode
+      ? '<form id="profile-edit-form" data-student-id="' + student.id + '">' +
+          '<div class="form-group"><label>Name</label><input id="prof-name" class="form-input" value="' + student.name + '" required /></div>' +
+          '<div class="form-group"><label>Age</label><input id="prof-age" class="form-input" type="number" min="15" max="30" value="' + student.age + '" required /></div>' +
+          '<div class="form-group"><label>Branch</label><input id="prof-branch" class="form-input" value="' + student.branch + '" required /></div>' +
+          '<div class="form-group"><label>Division</label><input id="prof-div" class="form-input" value="' + student.division + '" required /></div>' +
+          '<button type="submit" class="btn-primary">Save Profile</button>' +
+        "</form>"
+      : '<div>' +
+          '<div style="font-size:13px;font-weight:700;color:#475569;margin-bottom:4px;">Name</div><div class="profile-field-pill">' + student.name + "</div>" +
+          '<div style="font-size:13px;font-weight:700;color:#475569;margin-bottom:4px;">Age</div><div class="profile-field-pill">' + student.age + "</div>" +
+          '<div style="font-size:13px;font-weight:700;color:#475569;margin-bottom:4px;">Branch</div><div class="profile-field-pill">' + student.branch + "</div>" +
+          '<div style="font-size:13px;font-weight:700;color:#475569;margin-bottom:4px;">Division</div><div class="profile-field-pill">' + student.division + "</div>" +
+        "</div>";
+
+    const html =
+      '<div class="modal-header">' +
+        "<h3>Profile</h3>" +
+        '<button type="button" class="modal-close-btn" data-action="close-modal">&times;</button>' +
+      "</div>" +
+      '<div class="profile-modal-grid">' +
+        '<div class="profile-avatar-wrap">' +
+          '<div class="profile-avatar-circle">' + initials + "</div>" +
+          '<button type="button" class="profile-edit-pencil" data-action="toggle-profile-edit" data-student-id="' + student.id + '" data-edit="' + (editMode ? "0" : "1") + '" title="Edit Profile">&#9998;</button>' +
+        "</div>" +
+        fieldsHtml +
+      "</div>";
+    window.TCET_APP.openModal(html);
+  }
+
+  function render(session) {
+    const student = getStudent(session.userId);
+    currentStudentId = student.id;
+    const initials = student.name.split(" ").map(function (w) { return w[0]; }).join("").slice(0, 2).toUpperCase();
+    const isCloud = Boolean(window.TCET_DB.getFirebaseUrl());
+
+    const navHtml = TABS.map(function (tab) {
+      return (
+        '<button type="button" class="nav-item ' + (activeTab === tab ? "active" : "") + '" data-action="student-tab" data-tab="' + tab + '">' +
+          tab +
+        "</button>"
+      );
+    }).join("");
+
+    let bodyHtml = "";
+    if (activeTab === "Dashboard") bodyHtml = renderDashboard(student);
+    else if (activeTab === "Time Table") bodyHtml = renderTimeTable();
+    else if (activeTab === "Announcements") bodyHtml = renderAnnouncements();
+    else if (activeTab === "Exams") bodyHtml = renderExams();
+    else if (activeTab === "Syllabus") bodyHtml = renderSyllabus();
+    else if (activeTab === "Attendance") bodyHtml = renderAttendance(student);
+    else if (activeTab === "Study Timer") bodyHtml = renderStudyTimer(student);
+
+    return (
+      '<div class="erp-shell role-student">' +
+        '<div class="erp-logo-cell">' +
+          '<div class="sketch-logo-square">' + window.TCET_AUTH.getLogoSvg(24) + "</div>" +
+          '<div class="logo-text-stack"><strong>TCET ERP</strong><span>Student Portal</span></div>' +
+        "</div>" +
+        '<header class="erp-topbar">' +
+          '<h1 class="topbar-title">' + activeTab + "</h1>" +
+          '<div class="topbar-right">' +
+            '<span class="db-badge ' + (isCloud ? "cloud" : "") + '"><span class="db-dot"></span>' + (isCloud ? "Firebase Live" : "Live Sync") + "</span>" +
+            '<button type="button" class="profile-pill-btn" data-action="open-profile-modal" data-student-id="' + student.id + '">' +
+              '<span class="profile-pill-avatar">' + initials + "</span>" +
+              "<span>Profile</span>" +
+            "</button>" +
+          "</div>" +
+        "</header>" +
+        '<aside class="erp-sidebar">' +
+          '<nav class="sidebar-nav">' + navHtml + "</nav>" +
+          '<div class="sidebar-footer">' +
+            '<button type="button" class="logout-btn" data-action="logout">Logout / Switch Role</button>' +
+          "</div>" +
+        "</aside>" +
+        '<main class="erp-main">' + bodyHtml + "</main>" +
+      "</div>"
+    );
+  }
+
+  function afterRender() {
+    /* Bind Timetable horizontal slider from Sketch Page 2 Bottom */
+    const slider = document.getElementById("tt-horizontal-slider");
+    const viewport = document.getElementById("tt-scroll-viewport");
+    if (slider && viewport) {
+      slider.addEventListener("input", function () {
+        const maxScroll = viewport.scrollWidth - viewport.clientWidth;
+        viewport.scrollLeft = (Number(slider.value) / 100) * Math.max(0, maxScroll);
+      });
+      viewport.addEventListener("scroll", function () {
+        const maxScroll = viewport.scrollWidth - viewport.clientWidth;
+        if (maxScroll > 0) {
+          slider.value = String(Math.round((viewport.scrollLeft / maxScroll) * 100));
+        }
+      });
+    }
+  }
+
+  return {
+    getTab: getTab,
+    setTab: setTab,
+    render: render,
+    afterRender: afterRender,
+    openAnnouncementModal: openAnnouncementModal,
+    openExamModal: openExamModal,
+    openSyllabusModal: openSyllabusModal,
+    openSyllabusPdfModal: openSyllabusPdfModal,
+    openAttendanceModal: openAttendanceModal,
+    openProfileModal: openProfileModal,
+    yptToggleRun: yptToggleRun,
+    yptSetMode: yptSetMode,
+    yptSelectSubject: yptSelectSubject,
+    yptResetTimer: yptResetTimer,
+    yptSaveSession: yptSaveSession,
+    yptOpenFocusModal: yptOpenFocusModal
+  };
+})();
+
+
+/* ==========================================================================
+   Teacher Portal (js/teacher-portal.js)
+   Dedicated faculty UI/UX for marking LIVE attendance (immediately synced
+   to the Student Portal), entering exam marks, updating syllabus modules,
+   and posting announcements & submissions.
+   ========================================================================== */
+
+window.TCET_TEACHER = (function () {
+  let activeTab = "Mark Attendance";
+  let selectedSubject = "Chemistry";
+  let selectedDate = "23/11";
+  let selectedTime = "10:30 - 11:30";
+  let draftStatuses = {};
+
+  const TABS = [
+    "Mark Attendance",
+    "Enter Exam Marks",
+    "Syllabus Progress",
+    "Announcements & Tasks"
+  ];
+
+  function setTab(tab) {
+    activeTab = tab;
+    window.TCET_APP.render();
+  }
+
+  function setDraftStatus(studentId, status) {
+    draftStatuses[studentId] = status;
+    window.TCET_APP.render();
+  }
+
+  function setAttendanceFilter(field, val) {
+    if (field === "subject") selectedSubject = val;
+    if (field === "date") selectedDate = val;
+    if (field === "time") selectedTime = val;
+    window.TCET_APP.render();
+  }
+
+  function markAllStudents(status) {
+    const students = window.TCET_DB.getState().users.students || [];
+    students.forEach(function (st) {
+      draftStatuses[st.id] = status;
+    });
+    window.TCET_APP.render();
+  }
+
+  function submitLiveAttendance() {
+    const db = window.TCET_DB;
+    const dateVal = selectedDate || "Today";
+    const timeVal = selectedTime || "10:30 - 11:30";
+    let absentCount = 0;
+
+    db.saveState(function (s) {
+      if (!s.attendance) s.attendance = {};
+      if (!s.attendance[selectedSubject]) s.attendance[selectedSubject] = [];
+      if (!s.attendanceByStudent) s.attendanceByStudent = {};
+
+      const baseLogs = s.attendance[selectedSubject].slice();
+      (s.users.students || []).forEach(function (st) {
+        const stStatus = draftStatuses[st.id] || "Present";
+        if (stStatus === "Absent") absentCount++;
+        if (!s.attendanceByStudent[st.id]) s.attendanceByStudent[st.id] = {};
+        if (!s.attendanceByStudent[st.id][selectedSubject]) {
+          s.attendanceByStudent[st.id][selectedSubject] = baseLogs.map(function (e) {
+            return { date: e.date, time: e.time, status: e.status };
+          });
+        }
+        s.attendanceByStudent[st.id][selectedSubject].push({
+          date: dateVal,
+          time: timeVal,
+          status: stStatus
+        });
+      });
+
+      const firstSt = (s.users.students || [])[0];
+      const firstStatus = firstSt ? (draftStatuses[firstSt.id] || "Present") : "Present";
+      s.attendance[selectedSubject].push({
+        date: dateVal,
+        time: timeVal,
+        status: firstStatus
+      });
+    }, "Live Attendance: " + selectedSubject + " (" + dateVal + ") saved for all students");
+
+    window.TCET_APP.showToast("Attendance saved LIVE for all students (" + absentCount + " absent)!");
+  }
+
+  function renderMarkAttendance() {
+    const db = window.TCET_DB;
+    const state = db.getState();
+    const students = state.users.students;
+    const subjects = ["Maths", "Chemistry", "EM", "PPS", "IIKS"];
+
+    const subOpts = subjects.map(function (s) {
+      return '<option value="' + s + '" ' + (selectedSubject === s ? "selected" : "") + ">" + s + "</option>";
+    }).join("");
+
+    const rows = students.map(function (st) {
+      const current = draftStatuses[st.id] || "Present";
+      return (
+        "<tr>" +
+          "<td><strong>" + st.rollNo + "</strong></td>" +
+          "<td>" + st.name + " <small style=\"color:#64748b;\">(" + st.id + ")</small></td>" +
+          "<td>" + st.branch + " - " + st.division + "</td>" +
+          "<td>" +
+            '<div class="att-toggle-group">' +
+              '<button type="button" class="att-toggle-btn ' + (current === "Present" ? "selected-Present" : "") + '" data-action="teacher-set-att" data-student="' + st.id + '" data-status="Present">Present</button>' +
+              '<button type="button" class="att-toggle-btn ' + (current === "Absent" ? "selected-Absent" : "") + '" data-action="teacher-set-att" data-student="' + st.id + '" data-status="Absent">Absent</button>' +
+              '<button type="button" class="att-toggle-btn ' + (current === "Cancelled" ? "selected-Cancelled" : "") + '" data-action="teacher-set-att" data-student="' + st.id + '" data-status="Cancelled">Cancelled</button>' +
+            "</div>" +
+          "</td>" +
+        "</tr>"
+      );
+    }).join("");
+
+    return (
+      '<div class="kpi-row">' +
+        '<div class="kpi-card"><small>Division B Strength</small><div class="kpi-val">' + students.length + "</div></div>" +
+        '<div class="kpi-card"><small>' + selectedSubject + ' Avg</small><div class="kpi-val">' + db.calcSubjectAttendance(selectedSubject) + "%</div></div>" +
+        '<div class="kpi-card"><small>Overall Class Avg</small><div class="kpi-val">' + db.calcOverallAttendance() + "%</div></div>" +
+        '<div class="kpi-card"><small>Live DB Sync</small><div class="kpi-val" style="font-size:18px;margin-top:10px;">Active</div></div>' +
+      "</div>" +
+      '<div class="card">' +
+        '<h3 class="card-title">Mark Real-Time Lecture Attendance</h3>' +
+        '<div class="toolbar-row">' +
+          '<div class="form-group"><label>Subject</label><select id="t-att-subject" class="form-input" data-action="teacher-filter" data-field="subject">' + subOpts + "</select></div>" +
+          '<div class="form-group"><label>Lecture Date</label><input id="t-att-date" class="form-input" value="' + selectedDate + '" data-action="teacher-filter" data-field="date" /></div>' +
+          '<div class="form-group"><label>Time Slot</label><input id="t-att-time" class="form-input" value="' + selectedTime + '" data-action="teacher-filter" data-field="time" /></div>' +
+          '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
+            '<button type="button" class="btn-outline" data-action="teacher-mark-all" data-status="Present">All Present</button>' +
+            '<button type="button" class="btn-outline" data-action="teacher-mark-all" data-status="Absent">All Absent</button>' +
+            '<button type="button" class="btn-primary btn-teacher" data-action="teacher-submit-att">Submit Attendance Live</button>' +
+          "</div>" +
+        "</div>" +
+        '<table class="data-table">' +
+          "<thead><tr><th>Roll</th><th>Student</th><th>Batch</th><th>Attendance Status</th></tr></thead>" +
+          "<tbody>" + rows + "</tbody>" +
+        "</table>" +
+      "</div>"
+    );
+  }
+
+  function renderExamMarks() {
+    const state = window.TCET_DB.getState();
+    const examNames = Object.keys(state.exams);
+    const examOpts = examNames.map(function (n) {
+      return '<option value="' + n + '">' + n + "</option>";
+    }).join("");
+
+    return (
+      '<div class="card">' +
+        '<h3 class="card-title">Publish / Update Exam Marks (FE AIML Div B)</h3>' +
+        '<form id="teacher-marks-form">' +
+          '<div class="toolbar-row">' +
+            '<div class="form-group"><label>Examination</label><select id="tm-exam" class="form-input">' + examOpts + "</select></div>" +
+            '<div class="form-group"><label>Math (%)</label><input id="tm-Math" class="form-input" type="number" min="0" max="100" value="85" required /></div>' +
+            '<div class="form-group"><label>Chem (%)</label><input id="tm-Chem" class="form-input" type="number" min="0" max="100" value="82" required /></div>' +
+          "</div>" +
+          '<div class="toolbar-row">' +
+            '<div class="form-group"><label>EM (%)</label><input id="tm-EM" class="form-input" type="number" min="0" max="100" value="90" required /></div>' +
+            '<div class="form-group"><label>PPS (%)</label><input id="tm-PPS" class="form-input" type="number" min="0" max="100" value="88" required /></div>' +
+            '<div class="form-group"><label>IIKS (%)</label><input id="tm-IIKS" class="form-input" type="number" min="0" max="100" value="86" required /></div>' +
+          "</div>" +
+          '<button type="submit" class="btn-primary btn-teacher" style="max-width:260px;">Save &amp; Publish Marks</button>' +
+        "</form>" +
+      "</div>"
+    );
+  }
+
+  function renderSyllabusProgress() {
+    const state = window.TCET_DB.getState();
+    const blocks = Object.keys(state.syllabus).map(function (subKey) {
+      const mods = state.syllabus[subKey].map(function (m, idx) {
+        return (
+          '<div style="display:flex;align-items:center;gap:14px;padding:8px 0;border-bottom:1px solid #e2e8f0;">' +
+            '<div style="flex:1;font-weight:600;">Module ' + m.id + ": " + m.title + "</div>" +
+            '<input type="range" min="0" max="100" step="5" value="' + m.completion + '" data-action="teacher-syllabus-slider" data-subject="' + subKey + '" data-index="' + idx + '" style="width:160px;accent-color:#0f766e;" />' +
+            '<strong style="width:44px;text-align:right;color:#0f766e;">' + m.completion + "%</strong>" +
+          "</div>"
+        );
+      }).join("");
+      return '<div class="card" style="margin-bottom:16px;"><h3 class="card-title">' + subKey + " Modules</h3>" + mods + "</div>";
+    }).join("");
+    return blocks;
+  }
+
+  function renderAnnouncementsAndTasks() {
+    return (
+      '<div class="announcements-grid">' +
+        '<div class="card">' +
+          '<h3 class="card-title">Post New Announcement</h3>' +
+          '<form id="teacher-ann-form">' +
+            '<div class="form-group"><label>Category</label><select id="ta-cat" class="form-input"><option value="Academic">Academic</option><option value="Events">Events</option></select></div>' +
+            '<div class="form-group"><label>Title</label><input id="ta-title" class="form-input" placeholder="e.g. Chemistry Viva Schedule" required /></div>' +
+            '<div class="form-group"><label>Details</label><textarea id="ta-body" class="form-input" rows="3" placeholder="Enter circular details..." required></textarea></div>' +
+            '<div class="form-group"><label>Contact Info</label><input id="ta-contact" class="form-input" value="Prof. Rajesh Sharma on +91 98201 11223" required /></div>' +
+            '<button type="submit" class="btn-primary btn-teacher">Publish Announcement</button>' +
+          "</form>" +
+        "</div>" +
+        '<div class="card">' +
+          '<h3 class="card-title">Add Upcoming Submission</h3>' +
+          '<form id="teacher-sub-form">' +
+            '<div class="form-group"><label>Submission Topic</label><input id="ts-topic" class="form-input" placeholder="e.g. PPS Mini Project Report" required /></div>' +
+            '<div class="form-group"><label>Due Date (DD/MM)</label><input id="ts-date" class="form-input" placeholder="e.g. 25/11" required /></div>' +
+            '<div class="form-group"><label>Timeline Group</label><select id="ts-group" class="form-input"><option value="thisWeek">This week</option><option value="thisMonth">This month</option></select></div>' +
+            '<button type="submit" class="btn-primary btn-teacher">Add Submission Live</button>' +
+          "</form>" +
+        "</div>" +
+      "</div>"
+    );
+  }
+
+  function render(session) {
+    const state = window.TCET_DB.getState();
+    const teacher = state.users.teachers.find(function (t) { return t.id === session.userId; }) || state.users.teachers[0];
+
+    const navHtml = TABS.map(function (tab) {
+      return '<button type="button" class="nav-item ' + (activeTab === tab ? "active" : "") + '" data-action="teacher-tab" data-tab="' + tab + '">' + tab + "</button>";
+    }).join("");
+
+    let bodyHtml = "";
+    if (activeTab === "Mark Attendance") bodyHtml = renderMarkAttendance();
+    else if (activeTab === "Enter Exam Marks") bodyHtml = renderExamMarks();
+    else if (activeTab === "Syllabus Progress") bodyHtml = renderSyllabusProgress();
+    else if (activeTab === "Announcements & Tasks") bodyHtml = renderAnnouncementsAndTasks();
+
+    return (
+      '<div class="erp-shell role-teacher">' +
+        '<div class="erp-logo-cell">' +
+          '<div class="sketch-logo-square">' + window.TCET_AUTH.getLogoSvg(24) + "</div>" +
+          '<div class="logo-text-stack"><strong>TCET ERP</strong><span>Teacher Portal</span></div>' +
+        "</div>" +
+        '<header class="erp-topbar">' +
+          '<h1 class="topbar-title">' + activeTab + "</h1>" +
+          '<div class="topbar-right">' +
+            '<span class="db-badge"><span class="db-dot"></span>Faculty Live Sync</span>' +
+            '<div style="font-size:13.5px;font-weight:700;color:#0f766e;">' + teacher.name + "</div>" +
+          "</div>" +
+        "</header>" +
+        '<aside class="erp-sidebar">' +
+          '<nav class="sidebar-nav">' + navHtml + "</nav>" +
+          '<div class="sidebar-footer">' +
+            '<button type="button" class="logout-btn" data-action="logout">Logout / Switch Role</button>' +
+          "</div>" +
+        "</aside>" +
+        '<main class="erp-main">' + bodyHtml + "</main>" +
+      "</div>"
+    );
+  }
+
+  return {
+    setTab: setTab,
+    setDraftStatus: setDraftStatus,
+    setAttendanceFilter: setAttendanceFilter,
+    markAllStudents: markAllStudents,
+    submitLiveAttendance: submitLiveAttendance,
+    render: render
+  };
+})();
+
+
+/* ==========================================================================
+   Administrator Portal (js/admin-portal.js)
+   Dedicated Admin UI/UX for managing students/faculty, editing the weekly
+   timetable, moderating announcements, and connecting Firebase Realtime DB.
+   ========================================================================== */
+
+window.TCET_ADMIN = (function () {
+  let activeTab = "Overview";
+
+  const TABS = [
+    "Overview",
+    "Manage Users",
+    "Timetable Editor",
+    "Database Setup"
+  ];
+
+  function setTab(tab) {
+    activeTab = tab;
+    window.TCET_APP.render();
+  }
+
+  function renderOverview() {
+    const db = window.TCET_DB;
+    const state = db.getState();
+    const isCloud = Boolean(db.getFirebaseUrl());
+
+    const annRows = state.announcements.map(function (a) {
+      return (
+        "<tr>" +
+          "<td><strong>" + a.title + "</strong></td>" +
+          "<td>" + a.category + "</td>" +
+          "<td>" + a.date + "</td>" +
+          '<td><button type="button" class="btn-outline" data-action="admin-del-ann" data-id="' + a.id + '">Delete</button></td>' +
+        "</tr>"
+      );
+    }).join("");
+
+    return (
+      '<div class="kpi-row">' +
+        '<div class="kpi-card"><small>Total Students</small><div class="kpi-val">' + state.users.students.length + "</div></div>" +
+        '<div class="kpi-card"><small>Total Faculty</small><div class="kpi-val">' + state.users.teachers.length + "</div></div>" +
+        '<div class="kpi-card"><small>Avg Attendance</small><div class="kpi-val">' + db.calcOverallAttendance() + "%</div></div>" +
+        '<div class="kpi-card"><small>Backend Mode</small><div class="kpi-val" style="font-size:17px;margin-top:10px;">' + (isCloud ? "Firebase Cloud" : "Local Live") + "</div></div>" +
+      "</div>" +
+      '<div class="card">' +
+        '<h3 class="card-title">Manage Campus Announcements</h3>' +
+        '<table class="data-table">' +
+          "<thead><tr><th>Title</th><th>Category</th><th>Date</th><th>Action</th></tr></thead>" +
+          "<tbody>" + annRows + "</tbody>" +
+        "</table>" +
+      "</div>"
+    );
+  }
+
+  function renderManageUsers() {
+    const state = window.TCET_DB.getState();
+    const rows = state.users.students.map(function (s) {
+      return (
+        "<tr>" +
+          "<td><strong>" + s.id + "</strong></td>" +
+          "<td>" + s.name + "</td>" +
+          "<td>" + s.branch + " / Div " + s.division + "</td>" +
+          "<td>" + s.rollNo + "</td>" +
+        "</tr>"
+      );
+    }).join("");
+
+    return (
+      '<div class="announcements-grid">' +
+        '<div class="card">' +
+          '<h3 class="card-title">Enrolled Students (FE AIML)</h3>' +
+          '<table class="data-table">' +
+            "<thead><tr><th>ID</th><th>Name</th><th>Branch</th><th>Roll</th></tr></thead>" +
+            "<tbody>" + rows + "</tbody>" +
+          "</table>" +
+        "</div>" +
+        '<div class="card">' +
+          '<h3 class="card-title">Register New Student</h3>' +
+          '<form id="admin-add-student-form">' +
+            '<div class="form-group"><label>Student ID</label><input id="as-id" class="form-input" placeholder="e.g. STU202605" required /></div>' +
+            '<div class="form-group"><label>Full Name</label><input id="as-name" class="form-input" placeholder="e.g. Kabir Mehta" required /></div>' +
+            '<div class="form-group"><label>Roll Number</label><input id="as-roll" class="form-input" placeholder="e.g. B-18" required /></div>' +
+            '<div class="form-group"><label>Division</label><input id="as-div" class="form-input" value="B" required /></div>' +
+            '<button type="submit" class="btn-primary btn-admin">Add Student Account</button>' +
+          "</form>" +
+        "</div>" +
+      "</div>"
+    );
+  }
+
+  function renderTimetableEditor() {
+    const state = window.TCET_DB.getState();
+    const dayOpts = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(function (d) {
+      return '<option value="' + d + '">' + d + "</option>";
+    }).join("");
+    const slotOpts = state.timeSlots.map(function (t) {
+      return '<option value="' + t + '">' + t + "</option>";
+    }).join("");
+
+    return (
+      '<div class="card" style="max-width:640px;">' +
+        '<h3 class="card-title">Update Weekly Timetable Slot (Live)</h3>' +
+        '<form id="admin-tt-form">' +
+          '<div class="toolbar-row">' +
+            '<div class="form-group"><label>Day</label><select id="att-day" class="form-input">' + dayOpts + "</select></div>" +
+            '<div class="form-group"><label>Time Slot</label><select id="att-slot" class="form-input">' + slotOpts + "</select></div>" +
+          "</div>" +
+          '<div class="toolbar-row">' +
+            '<div class="form-group"><label>Subject (leave blank to clear)</label><input id="att-sub" class="form-input" placeholder="e.g. Math / PPS Lab" /></div>' +
+            '<div class="form-group"><label>Faculty Name</label><input id="att-fac" class="form-input" placeholder="e.g. Prof. Joshi" /></div>' +
+          "</div>" +
+          '<button type="submit" class="btn-primary btn-admin" style="max-width:240px;">Update Timetable Live</button>' +
+        "</form>" +
+      "</div>"
+    );
+  }
+
+  function renderDatabaseSetup() {
+    const currentUrl = window.TCET_DB.getFirebaseUrl();
+    return (
+      '<div class="card" style="max-width:720px;">' +
+        '<h3 class="card-title">Firebase Realtime Database Backend</h3>' +
+        '<p style="font-size:14px;color:#475569;margin-top:0;">Paste your free <strong>Firebase Realtime Database URL</strong> below to sync attendance, marks, and announcements live across different laptops and mobile phones. Leave empty to use instant Local Real-Time Sync across browser tabs.</p>' +
+        '<form id="admin-fb-form">' +
+          '<div class="form-group">' +
+            '<label for="fb-url-input">Firebase Realtime Database URL (HTTPS)</label>' +
+            '<input id="fb-url-input" class="form-input" type="url" placeholder="https://your-project-default-rtdb.firebaseio.com" value="' + currentUrl + '" />' +
+          "</div>" +
+          '<div style="display:flex;gap:10px;flex-wrap:wrap;">' +
+            '<button type="submit" class="btn-primary btn-admin" style="width:auto;padding:11px 20px;">Save Firebase Connection</button>' +
+            '<button type="button" class="btn-outline" data-action="admin-reset-db">Reset Demo Data to Defaults</button>' +
+          "</div>" +
+        "</form>" +
+      "</div>"
+    );
+  }
+
+  function render(session) {
+    const state = window.TCET_DB.getState();
+    const admin = state.users.admins.find(function (a) { return a.id === session.userId; }) || state.users.admins[0];
+
+    const navHtml = TABS.map(function (tab) {
+      return '<button type="button" class="nav-item ' + (activeTab === tab ? "active" : "") + '" data-action="admin-tab" data-tab="' + tab + '">' + tab + "</button>";
+    }).join("");
+
+    let bodyHtml = "";
+    if (activeTab === "Overview") bodyHtml = renderOverview();
+    else if (activeTab === "Manage Users") bodyHtml = renderManageUsers();
+    else if (activeTab === "Timetable Editor") bodyHtml = renderTimetableEditor();
+    else if (activeTab === "Database Setup") bodyHtml = renderDatabaseSetup();
+
+    return (
+      '<div class="erp-shell role-admin">' +
+        '<div class="erp-logo-cell">' +
+          '<div class="sketch-logo-square">' + window.TCET_AUTH.getLogoSvg(24) + "</div>" +
+          '<div class="logo-text-stack"><strong>TCET ERP</strong><span>Admin Portal</span></div>' +
+        "</div>" +
+        '<header class="erp-topbar">' +
+          '<h1 class="topbar-title">' + activeTab + "</h1>" +
+          '<div class="topbar-right">' +
+            '<div style="font-size:13.5px;font-weight:700;color:#b45309;">' + admin.name + "</div>" +
+          "</div>" +
+        "</header>" +
+        '<aside class="erp-sidebar">' +
+          '<nav class="sidebar-nav">' + navHtml + "</nav>" +
+          '<div class="sidebar-footer">' +
+            '<button type="button" class="logout-btn" data-action="logout">Logout / Switch Role</button>' +
+          "</div>" +
+        "</aside>" +
+        '<main class="erp-main">' + bodyHtml + "</main>" +
+      "</div>"
+    );
+  }
+
+  return {
+    setTab: setTab,
+    render: render
+  };
+})();
+
+
+/* ==========================================================================
+   Main Application Controller (js/app.js)
+   Manages session routing, global event delegation, modals, toasts, and
+   live UI re-rendering whenever the database updates.
+   ========================================================================== */
+
+window.TCET_APP = (function () {
+  let session = null;
+
+  function setSession(newSession) {
+    session = newSession;
+    render();
+  }
+
+  function logout() {
+    session = null;
+    closeModal();
+    render();
+    showToast("Logged out successfully.");
+  }
+
+  function openModal(html) {
+    const overlay = document.getElementById("modal-overlay");
+    const box = document.getElementById("modal-box");
+    if (!overlay || !box) return;
+    box.innerHTML = html;
+    overlay.classList.remove("hidden");
+  }
+
+  function closeModal() {
+    const overlay = document.getElementById("modal-overlay");
+    if (overlay) overlay.classList.add("hidden");
+  }
+
+  function showToast(msg) {
+    const container = document.getElementById("toast-container");
+    if (!container) return;
+    const el = document.createElement("div");
+    el.className = "toast";
+    el.textContent = msg;
+    container.appendChild(el);
+    setTimeout(function () {
+      if (el.parentNode) el.parentNode.removeChild(el);
+    }, 3400);
+  }
+
+  function render() {
+    const root = document.getElementById("app");
+    if (!root) return;
+    if (!session) {
+      root.innerHTML = window.TCET_AUTH.render();
+      return;
+    }
+    if (session.role === "student") {
+      root.innerHTML = window.TCET_STUDENT.render(session);
+      window.TCET_STUDENT.afterRender();
+    } else if (session.role === "teacher") {
+      root.innerHTML = window.TCET_TEACHER.render(session);
+    } else if (session.role === "admin") {
+      root.innerHTML = window.TCET_ADMIN.render(session);
+    }
+  }
+
+  /* Unified Click Delegation (keeps HTML clean and guarantees every button works) */
+  document.addEventListener("click", function (ev) {
+    const target = ev.target.closest("[data-action]");
+    if (!target) {
+      if (ev.target && ev.target.id === "modal-overlay") closeModal();
+      return;
+    }
+    const action = target.getAttribute("data-action");
+
+    if (action === "select-role") window.TCET_AUTH.setRole(target.getAttribute("data-role"));
+    else if (action === "quick-login") window.TCET_AUTH.quickLogin(target.getAttribute("data-role"));
+    else if (action === "logout") logout();
+    else if (action === "close-modal") closeModal();
+    else if (action === "student-tab") window.TCET_STUDENT.setTab(target.getAttribute("data-tab"));
+    else if (action === "teacher-tab") window.TCET_TEACHER.setTab(target.getAttribute("data-tab"));
+    else if (action === "admin-tab") window.TCET_ADMIN.setTab(target.getAttribute("data-tab"));
+    else if (action === "open-announcement-modal") window.TCET_STUDENT.openAnnouncementModal(target.getAttribute("data-id"));
+    else if (action === "open-exam-modal") window.TCET_STUDENT.openExamModal(target.getAttribute("data-exam"));
+    else if (action === "open-syllabus-modal") window.TCET_STUDENT.openSyllabusModal(target.getAttribute("data-subject"));
+    else if (action === "open-syllabus-pdf") window.TCET_STUDENT.openSyllabusPdfModal();
+    else if (action === "print-syllabus") window.print();
+    else if (action === "open-attendance-modal") window.TCET_STUDENT.openAttendanceModal(target.getAttribute("data-subject"));
+    else if (action === "open-profile-modal") window.TCET_STUDENT.openProfileModal(target.getAttribute("data-student-id"), false);
+    else if (action === "toggle-profile-edit") window.TCET_STUDENT.openProfileModal(target.getAttribute("data-student-id"), target.getAttribute("data-edit") === "1");
+    else if (action === "teacher-set-att") window.TCET_TEACHER.setDraftStatus(target.getAttribute("data-student"), target.getAttribute("data-status"));
+    else if (action === "teacher-mark-all") window.TCET_TEACHER.markAllStudents(target.getAttribute("data-status"));
+    else if (action === "teacher-submit-att") window.TCET_TEACHER.submitLiveAttendance();
+    else if (action === "admin-del-ann") {
+      const id = target.getAttribute("data-id");
+      window.TCET_DB.saveState(function (s) {
+        s.announcements = s.announcements.filter(function (a) { return a.id !== id; });
+      }, "Announcement deleted");
+      showToast("Announcement removed.");
+    } else if (action === "ypt-toggle") {
+      window.TCET_STUDENT.yptToggleRun();
+    } else if (action === "ypt-toggle-focus") {
+      window.TCET_STUDENT.yptToggleRun();
+      window.TCET_STUDENT.yptOpenFocusModal();
+    } else if (action === "ypt-save") {
+      window.TCET_STUDENT.yptSaveSession();
+    } else if (action === "ypt-save-close") {
+      window.TCET_STUDENT.yptSaveSession();
+      closeModal();
+    } else if (action === "ypt-reset") {
+      window.TCET_STUDENT.yptResetTimer();
+    } else if (action === "ypt-focus") {
+      window.TCET_STUDENT.yptOpenFocusModal();
+    } else if (action === "ypt-mode") {
+      window.TCET_STUDENT.yptSetMode(target.getAttribute("data-mode"));
+    } else if (action === "ypt-select-subject") {
+      window.TCET_STUDENT.yptSelectSubject(target.getAttribute("data-subject"));
+    } else if (action === "ypt-del-todo") {
+      const tid = target.getAttribute("data-id");
+      window.TCET_DB.saveState(function (s) {
+        if (s.studyTracker && s.studyTracker.todos) {
+          s.studyTracker.todos = s.studyTracker.todos.filter(function (t) { return t.id !== tid; });
+        }
+      }, "Study task removed");
+    } else if (action === "admin-reset-db") {
+      window.TCET_DB.resetDemoData();
+      showToast("All portal data restored to default seed values.");
+    }
+  });
+
+  /* Unified Change / Input Delegation */
+  document.addEventListener("change", function (ev) {
+    const target = ev.target;
+    const action = target && target.getAttribute("data-action");
+    if (action === "teacher-filter") {
+      window.TCET_TEACHER.setAttendanceFilter(target.getAttribute("data-field"), target.value);
+    } else if (action === "ypt-toggle-todo") {
+      const tid = target.getAttribute("data-id");
+      window.TCET_DB.saveState(function (s) {
+        if (s.studyTracker && s.studyTracker.todos) {
+          const item = s.studyTracker.todos.find(function (t) { return t.id === tid; });
+          if (item) item.done = Boolean(target.checked);
+        }
+      }, "Study task updated");
+    } else if (action === "teacher-syllabus-slider") {
+      const subKey = target.getAttribute("data-subject");
+      const idx = Number(target.getAttribute("data-index"));
+      const val = Number(target.value);
+      window.TCET_DB.saveState(function (s) {
+        if (s.syllabus[subKey] && s.syllabus[subKey][idx]) {
+          s.syllabus[subKey][idx].completion = val;
+        }
+      }, "Syllabus updated: " + subKey);
+      showToast(subKey + " module progress updated to " + val + "%");
+    }
+  });
+
+  /* Unified Form Submit Delegation */
+  document.addEventListener("submit", function (ev) {
+    const form = ev.target;
+    if (!form || !form.id) return;
+
+    if (form.id === "login-form") {
+      window.TCET_AUTH.handleFormSubmit(ev);
+    } else if (form.id === "profile-edit-form") {
+      ev.preventDefault();
+      const sid = form.getAttribute("data-student-id");
+      const name = document.getElementById("prof-name").value.trim();
+      const age = Number(document.getElementById("prof-age").value);
+      const branch = document.getElementById("prof-branch").value.trim();
+      const division = document.getElementById("prof-div").value.trim();
+      window.TCET_DB.saveState(function (s) {
+        const st = s.users.students.find(function (u) { return u.id === sid; });
+        if (st) {
+          st.name = name;
+          st.age = age;
+          st.branch = branch;
+          st.division = division;
+        }
+      }, "Student profile updated");
+      closeModal();
+      showToast("Profile updated successfully.");
+    } else if (form.id === "teacher-marks-form") {
+      ev.preventDefault();
+      const examName = document.getElementById("tm-exam").value;
+      const marks = {
+        Math: Number(document.getElementById("tm-Math").value),
+        Chem: Number(document.getElementById("tm-Chem").value),
+        EM: Number(document.getElementById("tm-EM").value),
+        PPS: Number(document.getElementById("tm-PPS").value),
+        IIKS: Number(document.getElementById("tm-IIKS").value)
+      };
+      window.TCET_DB.saveState(function (s) {
+        s.exams[examName] = { status: "published", subjects: marks };
+      }, "Exam marks published: " + examName);
+      showToast(examName + " marks published live to Student Portal!");
+    } else if (form.id === "teacher-ann-form") {
+      ev.preventDefault();
+      const cat = document.getElementById("ta-cat").value;
+      const title = document.getElementById("ta-title").value.trim();
+      const body = document.getElementById("ta-body").value.trim();
+      const contact = document.getElementById("ta-contact").value.trim();
+      const today = new Date();
+      const dateStr = String(today.getDate()).padStart(2, "0") + "/" + String(today.getMonth() + 1).padStart(2, "0") + "/" + today.getFullYear();
+      window.TCET_DB.saveState(function (s) {
+        s.announcements.unshift({
+          id: "ann-" + Date.now(),
+          category: cat,
+          title: title,
+          body: body,
+          contact: contact,
+          author: "Prof. Rajesh Sharma",
+          date: dateStr
+        });
+      }, "New announcement posted: " + title);
+      form.reset();
+      showToast("Announcement published live!");
+    } else if (form.id === "teacher-sub-form") {
+      ev.preventDefault();
+      const topic = document.getElementById("ts-topic").value.trim();
+      const date = document.getElementById("ts-date").value.trim();
+      const group = document.getElementById("ts-group").value;
+      window.TCET_DB.saveState(function (s) {
+        s.submissions[group].unshift({ title: topic, date: date });
+        s.submissions.allList.unshift({ topic: topic, date: date });
+      }, "New submission added: " + topic);
+      form.reset();
+      showToast("Upcoming submission added live!");
+    } else if (form.id === "admin-add-student-form") {
+      ev.preventDefault();
+      const id = document.getElementById("as-id").value.trim();
+      const name = document.getElementById("as-name").value.trim();
+      const roll = document.getElementById("as-roll").value.trim();
+      const div = document.getElementById("as-div").value.trim();
+      window.TCET_DB.saveState(function (s) {
+        s.users.students.push({
+          id: id,
+          password: "student123",
+          name: name,
+          age: 18,
+          year: "FE",
+          sem: "Sem I",
+          branch: "AIML",
+          division: div,
+          rollNo: roll
+        });
+      }, "New student registered: " + name);
+      form.reset();
+      showToast("Student " + name + " added (default password: student123).");
+    } else if (form.id === "admin-tt-form") {
+      ev.preventDefault();
+      const day = document.getElementById("att-day").value;
+      const slot = document.getElementById("att-slot").value;
+      const sub = document.getElementById("att-sub").value.trim();
+      const fac = document.getElementById("att-fac").value.trim();
+      window.TCET_DB.saveState(function (s) {
+        if (!s.timetable[day]) s.timetable[day] = {};
+        s.timetable[day][slot] = sub ? { subject: sub, faculty: fac || "Faculty" } : null;
+      }, "Timetable updated: " + day + " " + slot);
+      showToast("Timetable slot updated live!");
+    } else if (form.id === "ypt-todo-form") {
+      ev.preventDefault();
+      const text = document.getElementById("ypt-todo-text").value.trim();
+      const sub = document.getElementById("ypt-todo-sub").value;
+      if (!text) return;
+      window.TCET_DB.saveState(function (s) {
+        if (!s.studyTracker) s.studyTracker = JSON.parse(JSON.stringify(window.TCET_INITIAL_DATA.studyTracker));
+        s.studyTracker.todos.unshift({ id: "todo-" + Date.now(), subject: sub, text: text, done: false });
+      }, "Study task added");
+      form.reset();
+      showToast("Added study task under " + sub + ".");
+    } else if (form.id === "admin-fb-form") {
+      ev.preventDefault();
+      const url = document.getElementById("fb-url-input").value.trim();
+      window.TCET_DB.setFirebaseUrl(url);
+      showToast(url ? "Connected to Firebase Realtime Database!" : "Switched to Local Real-Time Sync.");
+    }
+  });
+
+  /* Bootstrap Database & Subscribe for Real-Time Cross-Tab / Firebase Updates */
+  function start() {
+    window.TCET_DB.init();
+    window.TCET_DB.subscribe(function (_state, reason) {
+      render();
+      if (session && session.role === "student" && reason && reason.indexOf("Live") === 0) {
+        showToast(reason);
+      }
+    });
+    render();
+  }
+
+  window.addEventListener("DOMContentLoaded", start);
+
+  return {
+    setSession: setSession,
+    logout: logout,
+    openModal: openModal,
+    closeModal: closeModal,
+    showToast: showToast,
+    render: render
+  };
+})();
+
+  </script>
 </body>
 </html>
